@@ -13,10 +13,30 @@ namespace SeatBookingService.Controllers
     public class MasterDataController : ControllerBase
     {
         [HttpGet]
-        [Route("GetMasterBusCategory")]
-        public async Task<IActionResult> GetMasterBusCategory()
+        [Route("GetMasterBus")]
+        public async Task<IActionResult> GetMasterBus()
         {
-            var response = new APIResult<List<MSBusCategory>>();
+            var response = new APIResult<List<MSBus>>();
+
+            try
+            {
+                response.is_ok = true;
+                //response.data = _masterDataDao.GetMasterTransportType();
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("GetMasterKelasBus")]
+        public async Task<IActionResult> GetMasterKelasBus()
+        {
+            var response = new APIResult<List<MSKelasBus>>();
 
             try
             {

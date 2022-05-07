@@ -12,7 +12,6 @@ namespace SeatBookingService.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-
         
     }
 }
