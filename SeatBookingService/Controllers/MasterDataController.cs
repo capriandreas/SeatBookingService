@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeatBookingService.Models;
-using SeatBookingService.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
