@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using MySqlConnector;
 using System.Net;
+using SeatBookingService.Models.DAO;
 
 namespace SeatBookingService.Controllers
 {
@@ -17,11 +18,13 @@ namespace SeatBookingService.Controllers
     public class MasterDataController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public MasterDataController(IConfiguration configuration)
+        private readonly IMasterDataDao _masterDataDao;
+
+        public MasterDataController(IConfiguration configuration, IMasterDataDao masterDataDao)
         {
             _configuration = configuration;
+            _masterDataDao = masterDataDao;
         }
-
 
         /// <summary>
         /// Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
@@ -33,44 +36,21 @@ namespace SeatBookingService.Controllers
         [Route("GetAllMasterBus")]
         public async Task<IActionResult> GetAllMasterBus()
         {
-            var response = new APIResult<DataTable>();
+            var response = new APIResult<List<MSBus>>();
 
             try
             {
-                string query = @"
-                        select a.id, a.no_bus, a.no_polisi, a.jumlah_seat, a.kelas_id, b.kelas_bus 
-                        from ms_bus a
-                        left join ms_kelas_bus b on b.id = a.kelas_id
-                ";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                MySqlDataReader myReader;
-                using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
-                {
-                    mycon.Open();
-                    using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
-                    {
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-
-                        myReader.Close();
-                        mycon.Close();
-                    }
-                }
-
-                response.httpCode = HttpStatusCode.OK;
                 response.is_ok = true;
-                response.data = table;
-                response.data_records = table.Rows.Count;
-                response.message = "Data Retrieved Successfully";
+                response.data = _masterDataDao.GetAllMasterBus();
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.is_ok = false;
                 response.message = ex.Message;
             }
-            
+
             return Ok(response);
         }
     }

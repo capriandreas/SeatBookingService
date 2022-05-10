@@ -7,6 +7,11 @@ namespace SeatBookingService
 {
     public class AppConfig
     {
+        public MySql MySqlConfig { get; set; }
+    }
 
+    public class MySql
+    {
+        public string Url { get; set; }
     }
 }

@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using SeatBookingService.Helper;
+using SeatBookingService.Models.DAO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,6 +51,11 @@ namespace SeatBookingService
             var config = new AppConfig();
             Configuration.Bind("AppConfig", config);
             services.AddSingleton(config);
+
+            var sqlHelper = new SQLHelper(config.MySqlConfig.Url);
+            services.AddSingleton<ISQLHelper>(sqlHelper);
+
+            services.AddSingleton<IMasterDataDao, MasterDataDao>();
 
             services.AddSwaggerGen(s =>
             {
