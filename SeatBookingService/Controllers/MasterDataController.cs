@@ -56,6 +56,7 @@ namespace SeatBookingService.Controllers
                 response.is_ok = true;
                 response.data = table;
                 response.data_records = table.Rows.Count;
+                response.message = "Data Retrieved Successfully";
             }
             catch(Exception ex)
             {
