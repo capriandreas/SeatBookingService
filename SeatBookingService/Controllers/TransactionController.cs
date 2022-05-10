@@ -23,6 +23,12 @@ namespace SeatBookingService.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Digunakan untuk create user agent oleh user admin
+        /// </summary>
+        /// <returns>
+        /// User's Object
+        /// </returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("CreateUser")]
@@ -132,6 +138,12 @@ namespace SeatBookingService.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Digunakan untuk Login
+        /// </summary>
+        /// <returns>
+        /// User's Object
+        /// </returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]

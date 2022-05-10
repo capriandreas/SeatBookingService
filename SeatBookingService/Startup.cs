@@ -9,7 +9,9 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace SeatBookingService
@@ -56,6 +58,10 @@ namespace SeatBookingService
                     Title = "Seat Booking",
                     Description = "API for Seat Booking"
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                s.IncludeXmlComments(xmlPath);
             });
         }
 

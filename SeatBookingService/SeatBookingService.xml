@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SeatBookingService</name>
+    </assembly>
+    <members>
+        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllMasterBus">
+            <summary>
+            Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
+            </summary>
+            <returns>
+            Return List of All Bus
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
+            <summary>
+            Digunakan untuk create user agent oleh user admin
+            </summary>
+            <returns>
+            User's Object
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.Login(SeatBookingService.Models.MSUsers)">
+            <summary>
+            Digunakan untuk Login
+            </summary>
+            <returns>
+            User's Object
+            </returns>
+        </member>
+    </members>
+</doc>

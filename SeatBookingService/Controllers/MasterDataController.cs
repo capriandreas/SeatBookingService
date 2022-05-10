@@ -22,6 +22,13 @@ namespace SeatBookingService.Controllers
             _configuration = configuration;
         }
 
+
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
+        /// </summary>
+        /// <returns>
+        /// Return List of All Bus
+        /// </returns>
         [HttpGet]
         [Route("GetAllMasterBus")]
         public async Task<IActionResult> GetAllMasterBus()
