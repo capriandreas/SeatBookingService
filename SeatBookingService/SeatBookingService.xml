@@ -28,5 +28,13 @@
             User's Object
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.AssignBusStatus(System.Collections.Generic.List{SeatBookingService.Models.TRBusAssignStatus})">
+            <summary>
+            Digunakan untuk assign bus status per tanggal
+            </summary>
+            <returns>
+            User's Object
+            </returns>
+        </member>
     </members>
 </doc>

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SeatBookingService.Controllers
@@ -41,15 +42,15 @@ namespace SeatBookingService.Controllers
             try
             {
                 #region Validation
-                if(string.IsNullOrWhiteSpace(user.username))
+                if (string.IsNullOrWhiteSpace(user.username))
                 {
                     errMsg = "Username cannot be empty";
                 }
-                else if(string.IsNullOrWhiteSpace(user.password))
+                else if (string.IsNullOrWhiteSpace(user.password))
                 {
                     errMsg = "Password cannot be empty";
                 }
-                else if(string.IsNullOrWhiteSpace(user.nickname))
+                else if (string.IsNullOrWhiteSpace(user.nickname))
                 {
                     errMsg = "Nickname cannot be empty";
                 }
@@ -88,7 +89,7 @@ namespace SeatBookingService.Controllers
                     }
                 }
 
-                if(table.Rows.Count >= 1)
+                if (table.Rows.Count >= 1)
                 {
                     response.httpCode = HttpStatusCode.OK;
                     response.is_ok = false;
@@ -215,6 +216,75 @@ namespace SeatBookingService.Controllers
                     response.is_ok = false;
                     response.message = "Login Failed";
                 }
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk assign bus status per tanggal
+        /// </summary>
+        /// <returns>
+        /// User's Object
+        /// </returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("AssignBusStatus")]
+        public async Task<IActionResult> AssignBusStatus(List<TRBusAssignStatus> bus)
+        {
+            var response = new APIResult<DataTable>();
+            string errMsg = string.Empty;
+            string query = string.Empty;
+
+            try
+            {
+                #region Validation
+                if(bus.Count <= 0)
+                {
+                    errMsg = "No Data, Please Check Your Request!";
+                }
+
+                if (!string.IsNullOrEmpty(errMsg))
+                {
+                    response.httpCode = HttpStatusCode.OK;
+                    response.is_ok = false;
+                    response.message = errMsg;
+                    return Ok(response);
+                }
+                #endregion
+
+                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+
+                StringBuilder sCommand = new StringBuilder("insert into tr_bus_assign_status (no_bus, status_bus_id, status_date) values ");
+
+                using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+                {
+                    List<string> Rows = new List<string>();
+
+                    foreach(var item in bus)
+                    {
+                        Rows.Add(string.Format("('{0}','{1}','{2}')", item.no_bus, item.status_bus_id, item.status_date.ToString("yyyy-MM-dd HH:mm:ss")));
+                    }
+
+                    sCommand.Append(string.Join(",", Rows));
+                    sCommand.Append(";");
+                    mycon.Open();
+
+                    using (MySqlCommand myCommand = new MySqlCommand(sCommand.ToString(), mycon))
+                    {
+                        myCommand.CommandType = CommandType.Text;
+                        myCommand.ExecuteNonQuery();
+                    }
+                }
+
+                response.httpCode = HttpStatusCode.OK;
+                response.is_ok = true;
+                response.message = "Data Saved Successfully";
             }
             catch (Exception ex)
             {
