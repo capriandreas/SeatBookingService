@@ -4,6 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using MySqlConnector;
+using System.Net;
 
 namespace SeatBookingService.Controllers
 {
@@ -11,43 +16,53 @@ namespace SeatBookingService.Controllers
     [ApiController]
     public class MasterDataController : ControllerBase
     {
-        [HttpGet]
-        [Route("GetMasterBus")]
-        public async Task<IActionResult> GetMasterBus()
+        private readonly IConfiguration _configuration;
+        public MasterDataController(IConfiguration configuration)
         {
-            var response = new APIResult<List<MSBus>>();
-
-            try
-            {
-                response.is_ok = true;
-                //response.data = _masterDataDao.GetMasterTransportType();
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
+            _configuration = configuration;
         }
 
         [HttpGet]
-        [Route("GetMasterKelasBus")]
-        public async Task<IActionResult> GetMasterKelasBus()
+        [Route("GetAllMasterBus")]
+        public async Task<IActionResult> GetAllMasterBus()
         {
-            var response = new APIResult<List<MSKelasBus>>();
+            var response = new APIResult<DataTable>();
 
             try
             {
+                string query = @"
+                        select a.id, a.no_bus, a.no_polisi, a.jumlah_seat, a.kelas_id, b.kelas_bus 
+                        from ms_bus a
+                        left join ms_kelas_bus b on b.id = a.kelas_id
+                ";
+
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+                MySqlDataReader myReader;
+                using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+                {
+                    mycon.Open();
+                    using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                    {
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+
+                        myReader.Close();
+                        mycon.Close();
+                    }
+                }
+
+                response.httpCode = HttpStatusCode.OK;
                 response.is_ok = true;
-                //response.data = _masterDataDao.GetMasterTransportType();
+                response.data = table;
+                response.data_records = table.Rows.Count;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 response.is_ok = false;
                 response.message = ex.Message;
             }
-
+            
             return Ok(response);
         }
     }
