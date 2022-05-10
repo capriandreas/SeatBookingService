@@ -48,11 +48,27 @@ namespace SeatBookingService
             Configuration.Bind("AppConfig", config);
             services.AddSingleton(config);
 
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "V1",
+                    Title = "Seat Booking",
+                    Description = "API for Seat Booking"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Seat Booking API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
             //Enable CORS
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
