@@ -19,7 +19,6 @@ namespace SeatBookingService.Helper
 
         public async Task<List<T>> queryList<T>(string query, Dictionary<string, object> param) where T : new()
         {
-            //string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
             MySqlConnection mycon = new MySqlConnection(_serverUrl);
 
             await mycon.OpenAsync();
@@ -46,6 +45,219 @@ namespace SeatBookingService.Helper
             finally
             {
                 await mycon.CloseAsync();
+            }
+        }
+
+        public async Task<T> querySingle<T>(string query, Dictionary<string, object> param) where T : new()
+        {
+            var data = await queryList<T>(query, param);
+            if (data != null && data.Count > 0)
+            {
+                return data[0];
+            }
+            return default(T);
+        }
+
+        public async Task<int> queryInsert(string query, Dictionary<string, object> param)
+        {
+            MySqlConnection conn = new MySqlConnection(_serverUrl);
+            await conn.OpenAsync();
+
+            try
+            {
+                var result = 0;
+                await using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (param != null && param.Count > 0)
+                        foreach (var key in param.Keys)
+                            cmd.Parameters.AddWithValue(key, param.GetValueOrDefault(key) == null ? DBNull.Value : param.GetValueOrDefault(key));
+
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                await conn.CloseAsync();
+            }
+        }
+
+        public async Task<int> queryInsertWithReturningId(string query, Dictionary<string, object> param)
+        {
+            MySqlConnection conn = new MySqlConnection(_serverUrl);
+            await conn.OpenAsync();
+
+            try
+            {
+                var result = 0;
+                await using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (param != null && param.Count > 0)
+                        foreach (var key in param.Keys)
+                            cmd.Parameters.AddWithValue(key, param.GetValueOrDefault(key) == null ? DBNull.Value : param.GetValueOrDefault(key));
+
+                    await using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            if (!reader.IsDBNull(0))
+                            {
+                                result = Convert.ToInt32(reader.GetInt32(0));
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                await conn.CloseAsync();
+            }
+        }
+
+        public async Task<int> queryInsert(MySqlConnection transaction, string query, Dictionary<string, object> param)
+        {
+            MySqlConnection conn = new MySqlConnection(_serverUrl);
+            await conn.OpenAsync();
+
+            try
+            {
+                var result = 0;
+                await using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (param != null && param.Count > 0)
+                        foreach (var key in param.Keys)
+                            cmd.Parameters.AddWithValue(key, param.GetValueOrDefault(key) == null ? DBNull.Value : param.GetValueOrDefault(key));
+
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+
+                return result;
+            }
+            finally
+            {
+                if (transaction == null)
+                    await conn.CloseAsync();
+            }
+        }
+
+        public async Task<int> queryUpdate(string query, Dictionary<string, object> param)
+        {
+            MySqlConnection conn = new MySqlConnection(_serverUrl);
+            await conn.OpenAsync();
+
+            try
+            {
+                var result = 0;
+                await using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (param != null && param.Count > 0)
+                        foreach (var key in param.Keys)
+                            cmd.Parameters.AddWithValue(key, param.GetValueOrDefault(key) == null ? DBNull.Value : param.GetValueOrDefault(key));
+
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                await conn.CloseAsync();
+            }
+        }
+
+        public async Task<int> queryUpdate(MySqlConnection transaction, string query, Dictionary<string, object> param)
+        {
+            MySqlConnection conn = new MySqlConnection(_serverUrl);
+            await conn.OpenAsync();
+
+            try
+            {
+                var result = 0;
+                await using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (param != null && param.Count > 0)
+                        foreach (var key in param.Keys)
+                            cmd.Parameters.AddWithValue(key, param.GetValueOrDefault(key) == null ? DBNull.Value : param.GetValueOrDefault(key));
+
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+
+                return result;
+            }
+            finally
+            {
+                if (transaction == null)
+                    await conn.CloseAsync();
+            }
+        }
+
+        public async Task<int> queryDelete(string query, Dictionary<string, object> param)
+        {
+            MySqlConnection conn = new MySqlConnection(_serverUrl);
+            await conn.OpenAsync();
+
+            try
+            {
+                var result = 0;
+                await using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (param != null && param.Count > 0)
+                        foreach (var key in param.Keys)
+                            cmd.Parameters.AddWithValue(key, param.GetValueOrDefault(key) == null ? DBNull.Value : param.GetValueOrDefault(key));
+
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                await conn.CloseAsync();
+            }
+        }
+
+        public async Task<int> queryDelete(MySqlConnection transaction, string query, Dictionary<string, object> param)
+        {
+            MySqlConnection conn = new MySqlConnection(_serverUrl);
+            await conn.OpenAsync();
+
+            try
+            {
+                var result = 0;
+                await using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (param != null && param.Count > 0)
+                        foreach (var key in param.Keys)
+                            cmd.Parameters.AddWithValue(key, param.GetValueOrDefault(key) == null ? DBNull.Value : param.GetValueOrDefault(key));
+
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+
+                return result;
+            }
+            finally
+            {
+                if (transaction == null)
+                    await conn.CloseAsync();
             }
         }
 
