@@ -25,7 +25,7 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk create user agent oleh user admin
+        /// Digunakan untuk create user agen dan pengemudi oleh user admin
         /// </summary>
         /// <returns>
         /// User's Object
@@ -103,7 +103,7 @@ namespace SeatBookingService.Controllers
 
                 query = @"
                         insert into ms_users (username, password, nickname, role_id) values
-                                                    (@username, @password, @nickname, 2);
+                                                    (@username, @password, @nickname, @role_id);
                 ";
 
                 using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
@@ -114,6 +114,7 @@ namespace SeatBookingService.Controllers
                         myCommand.Parameters.AddWithValue("@username", user.username);
                         myCommand.Parameters.AddWithValue("@password", encryptPassword);
                         myCommand.Parameters.AddWithValue("@nickname", user.nickname);
+                        myCommand.Parameters.AddWithValue("@role_id", user.role_id);
 
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
