@@ -53,5 +53,61 @@ namespace SeatBookingService.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan dropdown list origin city
+        /// </summary>
+        /// <returns>
+        /// Return List of All Bus
+        /// </returns>
+        [HttpGet]
+        [Route("GetAllOriginCity")]
+        public async Task<IActionResult> GetAllOriginCity()
+        {
+            var response = new APIResult<List<MSStationsRoutes>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _masterDataDao.GetAllOriginCity();
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan dropdown list destination city berdasarkan origin city
+        /// </summary>
+        /// <returns>
+        /// Return List of All Bus
+        /// </returns>
+        [HttpGet]
+        [Route("GetAllDestinationCity")]
+        public async Task<IActionResult> GetAllDestinationCity([FromBody] MSStationsRoutes obj)
+        {
+            var response = new APIResult<List<MSStationsRoutes>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _masterDataDao.GetAllDestinationCity(obj);
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
     }
 }

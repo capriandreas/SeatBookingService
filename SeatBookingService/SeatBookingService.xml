@@ -12,9 +12,25 @@
             Return List of All Bus
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllOriginCity">
+            <summary>
+            Digunakan untuk menampilkan dropdown list origin city
+            </summary>
+            <returns>
+            Return List of All Bus
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllDestinationCity(SeatBookingService.Models.MSStationsRoutes)">
+            <summary>
+            Digunakan untuk menampilkan dropdown list destination city berdasarkan origin city
+            </summary>
+            <returns>
+            Return List of All Bus
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
             <summary>
-            Digunakan untuk create user agent oleh user admin
+            Digunakan untuk create user agen dan pengemudi oleh user admin
             </summary>
             <returns>
             User's Object

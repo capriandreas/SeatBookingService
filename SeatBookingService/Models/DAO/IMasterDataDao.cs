@@ -8,5 +8,7 @@ namespace SeatBookingService.Models.DAO
     public interface IMasterDataDao
     {
         public List<MSBus> GetAllMasterBus();
+        public List<MSStationsRoutes> GetAllOriginCity();
+        public List<MSStationsRoutes> GetAllDestinationCity(MSStationsRoutes obj);
     }
 }
