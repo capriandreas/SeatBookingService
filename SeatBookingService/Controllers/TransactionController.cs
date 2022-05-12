@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using SeatBookingService.Helper;
 using SeatBookingService.Models;
+using SeatBookingService.Models.DAO;
+using SeatBookingService.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,9 +21,12 @@ namespace SeatBookingService.Controllers
     public class TransactionController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public TransactionController(IConfiguration configuration)
+        private readonly ITransactionDao _transactionDao;
+
+        public TransactionController(IConfiguration configuration, ITransactionDao transactionDao)
         {
             _configuration = configuration;
+            _transactionDao = transactionDao;
         }
 
         /// <summary>
@@ -269,7 +274,7 @@ namespace SeatBookingService.Controllers
 
                     foreach(var item in bus)
                     {
-                        Rows.Add(string.Format("('{0}','{1}','{2}')", item.no_bus, item.status_bus_id, item.status_date.ToString("yyyy-MM-dd HH:mm:ss")));
+                        Rows.Add(string.Format("('{0}','{1}','{2}')", item.no_bus, item.status_bus_id, item.assign_date.ToString("yyyy-MM-dd HH:mm:ss")));
                     }
 
                     sCommand.Append(string.Join(",", Rows));
@@ -286,6 +291,34 @@ namespace SeatBookingService.Controllers
                 response.httpCode = HttpStatusCode.OK;
                 response.is_ok = true;
                 response.message = "Data Saved Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
+        /// </summary>
+        /// <returns>
+        /// Return List of All Bus
+        /// </returns>
+        [HttpGet]
+        [Route("GetListAssignedBus")]
+        public async Task<IActionResult> GetListAssignedBus(TRBusAssignStatus obj)
+        {
+            var response = new APIResult<List<TRBusAssignStatusDto>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _transactionDao.GetListAssignedBus(obj);
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
             {

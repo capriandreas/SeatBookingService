@@ -56,6 +56,7 @@ namespace SeatBookingService
             services.AddSingleton<ISQLHelper>(sqlHelper);
 
             services.AddSingleton<IMasterDataDao, MasterDataDao>();
+            services.AddSingleton<ITransactionDao, TransactionDao>();
 
             services.AddSwaggerGen(s =>
             {

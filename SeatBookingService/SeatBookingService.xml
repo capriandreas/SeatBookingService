@@ -52,5 +52,13 @@
             User's Object
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListAssignedBus(SeatBookingService.Models.TRBusAssignStatus)">
+            <summary>
+            Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
+            </summary>
+            <returns>
+            Return List of All Bus
+            </returns>
+        </member>
     </members>
 </doc>
