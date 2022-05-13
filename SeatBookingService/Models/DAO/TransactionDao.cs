@@ -36,5 +36,23 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<TRBusAssignStatusDto>(query, param).Result;
         }
+
+        public bool SubmitTripSchedule(TRTripSchedule obj)
+        {
+            var query = @"insert into tr_trip_schedule 
+                            (schedule_date, origin, origin_additional_information, destination, destination_additional_information, created_by, updated_by)
+                            values (@schedule_date, @origin, @origin_additional_information, @destination, @destination_additional_information, @created_by, @created_by)";
+
+            var param = new Dictionary<string, object> {
+                    { "schedule_date", obj.schedule_date },
+                    { "origin", obj.origin },
+                    { "origin_additional_information", obj.origin_additional_information },
+                    { "destination", obj.destination },
+                    { "destination_additional_information", obj.destination_additional_information },
+                    { "created_by", obj.created_by }
+                };
+
+            return _sQLHelper.queryInsert(query, param).Result > 0;
+        }
     }
 }

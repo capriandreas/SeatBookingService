@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace SeatBookingService.Models
 {
-    public class TRBusSchedule
+    public class TRTripSchedule
     {
         public int id { get; set; }
-        public DateTime schedule_date { get; set; }
+        public DateTime? schedule_date { get; set; }
         public string origin { get; set; }
         public string origin_additional_information { get; set; }
         public string destination { get; set; }

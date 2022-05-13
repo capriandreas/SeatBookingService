@@ -30,7 +30,7 @@ namespace SeatBookingService.Controllers
         /// Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
         /// </summary>
         /// <returns>
-        /// Return List of All Bus
+        /// 
         /// </returns>
         [HttpGet]
         [Route("GetAllMasterBus")]
@@ -58,7 +58,7 @@ namespace SeatBookingService.Controllers
         /// Digunakan untuk menampilkan dropdown list origin city
         /// </summary>
         /// <returns>
-        /// Return List of All Bus
+        /// 
         /// </returns>
         [HttpGet]
         [Route("GetAllOriginCity")]
@@ -86,7 +86,7 @@ namespace SeatBookingService.Controllers
         /// Digunakan untuk menampilkan dropdown list destination city berdasarkan origin city
         /// </summary>
         /// <returns>
-        /// Return List of All Bus
+        /// 
         /// </returns>
         [HttpGet]
         [Route("GetAllDestinationCity")]

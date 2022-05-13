@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
+using SeatBookingService.BusinessLogic;
 using SeatBookingService.Helper;
 using SeatBookingService.Models;
 using SeatBookingService.Models.DAO;
@@ -33,7 +34,7 @@ namespace SeatBookingService.Controllers
         /// Digunakan untuk create user agen dan pengemudi oleh user admin
         /// </summary>
         /// <returns>
-        /// User's Object
+        /// 
         /// </returns>
         [AllowAnonymous]
         [HttpPost]
@@ -134,7 +135,6 @@ namespace SeatBookingService.Controllers
                 response.is_ok = true;
                 response.data = table;
                 response.data_records = table.Rows.Count;
-                response.message = "User Created Successfully";
             }
             catch (Exception ex)
             {
@@ -149,7 +149,7 @@ namespace SeatBookingService.Controllers
         /// Digunakan untuk Login
         /// </summary>
         /// <returns>
-        /// User's Object
+        /// 
         /// </returns>
         [AllowAnonymous]
         [HttpPost]
@@ -183,7 +183,7 @@ namespace SeatBookingService.Controllers
                 string encryptPassword = EncryptionHelper.sha256(user.password);
 
                 string query = @"
-                        select username, nickname, role_id, rolename 
+                        select a.id, username, nickname, role_id, rolename
                         from ms_users a
                         left join ms_roles b on a.role_id = b.id
                         where username = @username and password = @password and is_active = 1;
@@ -236,7 +236,7 @@ namespace SeatBookingService.Controllers
         /// Digunakan untuk assign bus status per tanggal
         /// </summary>
         /// <returns>
-        /// User's Object
+        /// 
         /// </returns>
         [AllowAnonymous]
         [HttpPost]
@@ -290,7 +290,6 @@ namespace SeatBookingService.Controllers
 
                 response.httpCode = HttpStatusCode.OK;
                 response.is_ok = true;
-                response.message = "Data Saved Successfully";
             }
             catch (Exception ex)
             {
@@ -305,7 +304,7 @@ namespace SeatBookingService.Controllers
         /// Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
         /// </summary>
         /// <returns>
-        /// Return List of All Bus
+        /// 
         /// </returns>
         [HttpGet]
         [Route("GetListAssignedBus")]
@@ -319,6 +318,42 @@ namespace SeatBookingService.Controllers
                 response.data = _transactionDao.GetListAssignedBus(obj);
                 response.data_records = response.data.Count;
                 response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk submit trip schedule oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("SubmitTripSchedule")]
+        public async Task<IActionResult> SubmitTripSchedule(TRTripSchedule obj)
+        {
+            var response = new APIResult<List<TRTripSchedule>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.SubmitTripScheduleValidation(obj);
+
+                if(res.result)
+                {
+                    response.is_ok = _transactionDao.SubmitTripSchedule(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+                
             }
             catch (Exception ex)
             {

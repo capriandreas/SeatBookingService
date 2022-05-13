@@ -9,7 +9,7 @@
             Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
             </summary>
             <returns>
-            Return List of All Bus
+            
             </returns>
         </member>
         <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllOriginCity">
@@ -17,7 +17,7 @@
             Digunakan untuk menampilkan dropdown list origin city
             </summary>
             <returns>
-            Return List of All Bus
+            
             </returns>
         </member>
         <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllDestinationCity(SeatBookingService.Models.MSStationsRoutes)">
@@ -25,7 +25,7 @@
             Digunakan untuk menampilkan dropdown list destination city berdasarkan origin city
             </summary>
             <returns>
-            Return List of All Bus
+            
             </returns>
         </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
@@ -33,7 +33,7 @@
             Digunakan untuk create user agen dan pengemudi oleh user admin
             </summary>
             <returns>
-            User's Object
+            
             </returns>
         </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.Login(SeatBookingService.Models.MSUsers)">
@@ -41,7 +41,7 @@
             Digunakan untuk Login
             </summary>
             <returns>
-            User's Object
+            
             </returns>
         </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.AssignBusStatus(System.Collections.Generic.List{SeatBookingService.Models.TRBusAssignStatus})">
@@ -49,7 +49,7 @@
             Digunakan untuk assign bus status per tanggal
             </summary>
             <returns>
-            User's Object
+            
             </returns>
         </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GetListAssignedBus(SeatBookingService.Models.TRBusAssignStatus)">
@@ -57,7 +57,15 @@
             Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
             </summary>
             <returns>
-            Return List of All Bus
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitTripSchedule(SeatBookingService.Models.TRTripSchedule)">
+            <summary>
+            Digunakan untuk submit trip schedule oleh admin
+            </summary>
+            <returns>
+            
             </returns>
         </member>
     </members>
