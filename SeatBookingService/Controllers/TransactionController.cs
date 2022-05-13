@@ -336,7 +336,7 @@ namespace SeatBookingService.Controllers
         /// </returns>
         [HttpPost]
         [Route("SubmitTripSchedule")]
-        public async Task<IActionResult> SubmitTripSchedule(TRTripSchedule obj)
+        public async Task<IActionResult> SubmitTripSchedule(TRTripScheduleDto obj)
         {
             var response = new APIResult<List<TRTripSchedule>>();
             BusinessLogicResult res = new BusinessLogicResult();

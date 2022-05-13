@@ -60,7 +60,7 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitTripSchedule(SeatBookingService.Models.TRTripSchedule)">
+        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitTripSchedule(SeatBookingService.Models.DTO.TRTripScheduleDto)">
             <summary>
             Digunakan untuk submit trip schedule oleh admin
             </summary>

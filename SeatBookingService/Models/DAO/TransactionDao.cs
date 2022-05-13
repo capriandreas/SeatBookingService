@@ -37,13 +37,18 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<TRBusAssignStatusDto>(query, param).Result;
         }
 
-        public bool SubmitTripSchedule(TRTripSchedule obj)
+        public bool SubmitTripSchedule(TRTripScheduleDto obj)
         {
-            var query = @"insert into tr_trip_schedule 
-                            (schedule_date, origin, origin_additional_information, destination, destination_additional_information, created_by, updated_by)
-                            values (@schedule_date, @origin, @origin_additional_information, @destination, @destination_additional_information, @created_by, @created_by)";
+            bool result = false;
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
 
-            var param = new Dictionary<string, object> {
+            #region Insert into tr_trip_schedule
+            query = @"insert into tr_trip_schedule 
+                        (schedule_date, origin, origin_additional_information, destination, destination_additional_information, created_by, updated_by)
+                        values (@schedule_date, @origin, @origin_additional_information, @destination, @destination_additional_information, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
                     { "schedule_date", obj.schedule_date },
                     { "origin", obj.origin },
                     { "origin_additional_information", obj.origin_additional_information },
@@ -51,8 +56,26 @@ namespace SeatBookingService.Models.DAO
                     { "destination_additional_information", obj.destination_additional_information },
                     { "created_by", obj.created_by }
                 };
+            
+            int trip_schedule_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
+            #endregion
 
-            return _sQLHelper.queryInsert(query, param).Result > 0;
+            #region Insert into tr_bus_trip_schedule
+            query = @"insert into tr_bus_trip_schedule 
+                        (trip_schedule_id, no_bus, created_by, updated_by)
+                        values (@trip_schedule_id, @no_bus, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
+                    { "trip_schedule_id", trip_schedule_id },
+                    { "no_bus", obj.no_bus },
+                    { "created_by", obj.created_by }
+                };
+
+            result = _sQLHelper.queryInsert(query, param).Result > 0;
+
+            #endregion
+
+            return result;
         }
     }
 }

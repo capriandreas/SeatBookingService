@@ -111,6 +111,11 @@ namespace SeatBookingService.Helper
                             }
                         }
                     }
+
+                    if(result == 0)
+                    {
+                        result = Convert.ToInt32(cmd.LastInsertedId);
+                    }
                 }
 
                 return result;

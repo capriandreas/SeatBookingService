@@ -9,6 +9,6 @@ namespace SeatBookingService.Models.DAO
     public interface ITransactionDao
     {
         public List<TRBusAssignStatusDto> GetListAssignedBus(TRBusAssignStatus obj);
-        public bool SubmitTripSchedule(TRTripSchedule obj);
+        public bool SubmitTripSchedule(TRTripScheduleDto obj);
     }
 }
