@@ -1,4 +1,5 @@
 ﻿using SeatBookingService.Helper;
+using SeatBookingService.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +18,30 @@ namespace SeatBookingService.Models.DAO
 
         public List<MSStationsRoutes> GetAllDestinationCity(MSStationsRoutes obj)
         {
-            var query = @"select distinct city 
-                            from ms_stations_routes a
-                            where route in (SELECT distinct route from ms_stations_routes where city = @city and route_order = 1)
-                            and a.route_order > 1";
+            var query = @"
+                        select distinct city
+                        from
+                        (
+	                        select *, max(case when city = @city then route_order else 0 end) over (partition by route) min_route
+	                        from ms_stations_routes
+                        )a
+                        where route_order > min_route";
 
             var param = new Dictionary<string, object> { 
                 { "city", obj.city } 
             };
 
             return _sQLHelper.queryList<MSStationsRoutes>(query, param).Result;
+        }
+
+        public List<MSUsersDto> GetAllListUsers()
+        {
+            var query = @"select a.username, a.nickname, a.role_id, b.rolename, a.created_date
+                            from ms_users a
+                            left join ms_roles b on a.role_id = b.id
+                            where a.role_id <> 1 and a.is_active = 1 order by role_id";
+
+            return _sQLHelper.queryList<MSUsersDto>(query, null).Result;
         }
 
         public List<MSBus> GetAllMasterBus()

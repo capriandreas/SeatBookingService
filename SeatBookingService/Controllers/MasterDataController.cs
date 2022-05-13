@@ -10,6 +10,7 @@ using System.Data;
 using MySqlConnector;
 using System.Net;
 using SeatBookingService.Models.DAO;
+using SeatBookingService.Models.DTO;
 
 namespace SeatBookingService.Controllers
 {
@@ -90,7 +91,7 @@ namespace SeatBookingService.Controllers
         /// </returns>
         [HttpGet]
         [Route("GetAllDestinationCity")]
-        public async Task<IActionResult> GetAllDestinationCity([FromBody] MSStationsRoutes obj)
+        public async Task<IActionResult> GetAllDestinationCity([FromQuery] MSStationsRoutes obj)
         {
             var response = new APIResult<List<MSStationsRoutes>>();
 
@@ -98,6 +99,34 @@ namespace SeatBookingService.Controllers
             {
                 response.is_ok = true;
                 response.data = _masterDataDao.GetAllDestinationCity(obj);
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh list User selain User Admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetAllListUsers")]
+        public async Task<IActionResult> GetAllListUsers()
+        {
+            var response = new APIResult<List<MSUsersDto>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _masterDataDao.GetAllListUsers();
                 response.data_records = response.data.Count;
                 response.httpCode = HttpStatusCode.OK;
             }

@@ -308,7 +308,7 @@ namespace SeatBookingService.Controllers
         /// </returns>
         [HttpGet]
         [Route("GetListAssignedBus")]
-        public async Task<IActionResult> GetListAssignedBus(TRBusAssignStatus obj)
+        public async Task<IActionResult> GetListAssignedBus([FromQuery] TRBusAssignStatus obj)
         {
             var response = new APIResult<List<TRBusAssignStatusDto>>();
 
@@ -372,7 +372,7 @@ namespace SeatBookingService.Controllers
         /// </returns>
         [HttpGet]
         [Route("GetListTripSchedule")]
-        public async Task<IActionResult> GetListTripSchedule(TRTripSchedule obj)
+        public async Task<IActionResult> GetListTripSchedule([FromQuery] TRTripSchedule obj)
         {
             var response = new APIResult<List<TRTripScheduleDto>>();
             BusinessLogicResult res = new BusinessLogicResult();

@@ -28,6 +28,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllListUsers">
+            <summary>
+            Digunakan untuk menampilkan seluruh list User selain User Admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
             <summary>
             Digunakan untuk create user agen dan pengemudi oleh user admin
