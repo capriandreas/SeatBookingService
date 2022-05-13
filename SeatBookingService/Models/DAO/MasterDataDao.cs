@@ -20,7 +20,7 @@ namespace SeatBookingService.Models.DAO
             var query = @"select distinct city 
                             from ms_stations_routes a
                             where route in (SELECT distinct route from ms_stations_routes where city = @city and route_order = 1)
-                            and a.city <> @city";
+                            and a.route_order > 1";
 
             var param = new Dictionary<string, object> { 
                 { "city", obj.city } 
