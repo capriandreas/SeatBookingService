@@ -68,5 +68,13 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListTripSchedule(SeatBookingService.Models.TRTripSchedule)">
+            <summary>
+            Digunakan untuk menampilkan seluruh jadwal trip yang telah dibuat oleh admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
     </members>
 </doc>

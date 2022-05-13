@@ -10,5 +10,6 @@ namespace SeatBookingService.Models.DAO
     {
         public List<TRBusAssignStatusDto> GetListAssignedBus(TRBusAssignStatus obj);
         public bool SubmitTripSchedule(TRTripScheduleDto obj);
+        public List<TRTripScheduleDto> GetListTripSchedule(TRTripSchedule obj);
     }
 }

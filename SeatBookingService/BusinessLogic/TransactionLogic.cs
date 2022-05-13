@@ -46,5 +46,22 @@ namespace SeatBookingService.BusinessLogic
 
             return res;
         }
+
+        public static BusinessLogicResult GetListTripScheduleValidation(TRTripSchedule obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if(obj.schedule_date == DateTime.MinValue || obj.schedule_date == null)
+            {
+                errMsg = "Schedule Date cannot be empty";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
     }
 }

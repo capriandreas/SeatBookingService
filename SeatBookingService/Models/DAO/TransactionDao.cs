@@ -37,6 +37,25 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<TRBusAssignStatusDto>(query, param).Result;
         }
 
+        public List<TRTripScheduleDto> GetListTripSchedule(TRTripSchedule obj)
+        {
+            var query = @"select 
+                                a.id, a.schedule_date, a.origin, a.origin_additional_information, a.destination, 
+                                a.destination_additional_information, a.created_by,
+                                b.no_bus, c.jumlah_seat, c.no_polisi, c.kelas_id, d.kelas_bus
+                            from tr_trip_schedule a
+                            left join tr_bus_trip_schedule b on a.id = b.trip_schedule_id
+                            left join ms_bus c on c.no_bus = b.no_bus
+                            left join ms_kelas_bus d on d.id = c.kelas_id
+                                where a.schedule_date = @schedule_date";
+
+            var param = new Dictionary<string, object> {
+                { "schedule_date", obj.schedule_date }
+            };
+
+            return _sQLHelper.queryList<TRTripScheduleDto>(query, param).Result;
+        }
+
         public bool SubmitTripSchedule(TRTripScheduleDto obj)
         {
             bool result = false;

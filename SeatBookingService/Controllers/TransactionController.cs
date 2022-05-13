@@ -363,5 +363,41 @@ namespace SeatBookingService.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh jadwal trip yang telah dibuat oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetListTripSchedule")]
+        public async Task<IActionResult> GetListTripSchedule(TRTripSchedule obj)
+        {
+            var response = new APIResult<List<TRTripScheduleDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.GetListTripScheduleValidation(obj);
+
+                if (res.result)
+                {
+                    response.data = _transactionDao.GetListTripSchedule(obj);
+                    response.data_records = response.data.Count;
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
     }
 }
