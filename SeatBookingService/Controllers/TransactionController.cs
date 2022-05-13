@@ -334,7 +334,7 @@ namespace SeatBookingService.Controllers
         /// <returns>
         /// 
         /// </returns>
-        [HttpGet]
+        [HttpPost]
         [Route("SubmitTripSchedule")]
         public async Task<IActionResult> SubmitTripSchedule(TRTripSchedule obj)
         {
