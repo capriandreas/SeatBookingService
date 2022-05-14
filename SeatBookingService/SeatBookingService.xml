@@ -84,5 +84,13 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
+            <summary>
+            Digunakan untuk generate seat untuk master data
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
     </members>
 </doc>

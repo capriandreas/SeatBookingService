@@ -399,5 +399,36 @@ namespace SeatBookingService.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Digunakan untuk generate seat untuk master data
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("GenerateSeat")]
+        public async Task<IActionResult> GenerateSeat(GenerateSeat obj)
+        {
+            var response = new APIResult<List<string>>();
+            var res = new BusinessLogicResult<List<string>>();
+
+            try
+            {
+                res = MasterDataLogic.GenerateMasterSeat(obj);
+
+                response.data = res.data;
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
     }
 }
