@@ -47,6 +47,7 @@ namespace SeatBookingService.BusinessLogic
             {
                 loopTotal += 1;
             }
+
             for (int i = 1; i <= loopTotal; i++)
             {
                 string seat = string.Empty;
@@ -55,7 +56,7 @@ namespace SeatBookingService.BusinessLogic
                     if (totalSeat == listSeat.Count)
                         break;
                     seat = i.ToString();
-                    seat = seat + item;
+                    seat = seat + "," + item;
                     listSeat.Add(seat);
                 }
                 counter++;
@@ -68,16 +69,18 @@ namespace SeatBookingService.BusinessLogic
         {
             List<MSSeat> result = new List<MSSeat>();
             int counter = 1;
-            foreach(var item in listStrings)
+            
+            foreach (var item in listStrings)
             {
                 MSSeat seat = new MSSeat();
-                foreach (var karakter in item)
-                { 
+                string[] words = item.Split(',');
+                foreach (string word in words)
+                {
                     seat.no_bus = obj.no_bus;
                     if (counter == 1)
-                        seat.seat_row = karakter.ToString();
+                        seat.seat_row = word.ToString();
                     else if (counter == 2)
-                        seat.seat_column = karakter.ToString();
+                        seat.seat_column = word.ToString();
 
                     counter++;
                 }

@@ -16,6 +16,50 @@ namespace SeatBookingService.Models.DAO
             _sQLHelper = sQLHelper;
         }
 
+        public List<MSSeatDto> GetListAllSeat(int trip_schedule_id)
+        {
+            var query = @"select * from
+                                (
+	                                select 
+	                                c.id as seat_id,
+	                                c.no_bus,
+	                                c.seat_column,
+	                                c.seat_row,
+	                                a.users_id as booked_by,
+	                                CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
+	                                d.id as trip_schedule_id
+	                                from tr_reserved_seat_header a
+	                                left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
+	                                right join ms_seat c on c.id = b.seat_id
+	                                left join tr_trip_schedule d on d.id = a.trip_schedule_id
+	                                where d.id = @trip_schedule_id 
+	                            UNION
+	                                select 
+	                                c.id as seat_id,
+	                                c.no_bus,
+	                                c.seat_column,
+	                                c.seat_row,
+	                                a.users_id as booked_by,
+	                                CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
+	                                d.id as trip_schedule_id
+	                                from tr_reserved_seat_header a
+	                                left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
+	                                right join ms_seat c on c.id = b.seat_id
+	                                left join tr_trip_schedule d on d.id = a.trip_schedule_id
+	                                left join tr_bus_trip_schedule e on e.trip_schedule_id = d.id and e.no_bus = c.no_bus
+	                                where c.no_bus = (select no_bus from 
+						                                tr_bus_trip_schedule a
+						                                where a.trip_schedule_id = @trip_schedule_id)
+	                            ) a
+                            order by a.seat_id";
+
+            var param = new Dictionary<string, object> {
+                { "trip_schedule_id", trip_schedule_id }
+            };
+
+            return _sQLHelper.queryList<MSSeatDto>(query, param).Result;
+        }
+
         public List<TRBusAssignStatusDto> GetListAssignedBus(TRBusAssignStatus obj)
         {
             var query = @"select h.no_bus, c.no_polisi, c.jumlah_seat, c.kelas_id, h.status_bus_id, b.status_bus, h.assign_date, d.kelas_bus

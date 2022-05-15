@@ -401,6 +401,37 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk menampilkan seluruh data seat berdasarkan trip schedule id
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetListAllSeat")]
+        public async Task<IActionResult> GetListAllSeat([FromQuery] int trip_schedule_id)
+        {
+            var response = new APIResult<List<MSSeatDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetListAllSeat(trip_schedule_id);
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>
@@ -418,6 +449,7 @@ namespace SeatBookingService.Controllers
                 res = MasterDataLogic.GenerateMasterSeat(obj);
                 List<MSSeat> listSeat = MasterDataLogic.MappingSeatToModel(res.data, obj);
 
+                //response.data = res.data;
                 response.is_ok = _transactionDao.InsertMasterSeat(listSeat);
                 response.httpCode = HttpStatusCode.OK;
                 response.message = res.message;
