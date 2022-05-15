@@ -63,5 +63,29 @@ namespace SeatBookingService.BusinessLogic
 
             return listSeat;
         }
+
+        public static List<MSSeat> MappingSeatToModel(List<string> listStrings, GenerateSeat obj)
+        {
+            List<MSSeat> result = new List<MSSeat>();
+            int counter = 1;
+            foreach(var item in listStrings)
+            {
+                MSSeat seat = new MSSeat();
+                foreach (var karakter in item)
+                { 
+                    seat.no_bus = obj.no_bus;
+                    if (counter == 1)
+                        seat.seat_row = karakter.ToString();
+                    else if (counter == 2)
+                        seat.seat_column = karakter.ToString();
+
+                    counter++;
+                }
+                result.Add(seat);
+                counter = 1;
+            }
+
+            return result;
+        }
     }
 }

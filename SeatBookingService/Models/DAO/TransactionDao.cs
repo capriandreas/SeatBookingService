@@ -56,6 +56,28 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<TRTripScheduleDto>(query, param).Result;
         }
 
+        public bool InsertMasterSeat(List<MSSeat> obj)
+        {
+            string query = string.Empty;
+            bool result = false;
+            var param = new Dictionary<string, object>();
+
+            foreach (var item in obj)
+            {
+                query = @"insert into ms_seat (no_bus, seat_column, seat_row) values (@no_bus, @seat_column, @seat_row);";
+
+                param = new Dictionary<string, object> {
+                    { "no_bus", item.no_bus },
+                    { "seat_column", item.seat_column },
+                    { "seat_row", item.seat_row }
+                };
+
+                result = _sQLHelper.queryInsert(query, param).Result > 0;
+            }
+
+            return result;
+        }
+
         public bool SubmitTripSchedule(TRTripScheduleDto obj)
         {
             bool result = false;
