@@ -467,6 +467,36 @@ namespace SeatBookingService.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("GetListBookedTrip")]
+        public async Task<IActionResult> GetListBookedTrip([FromQuery] int users_id)
+        {
+            var response = new APIResult<List<TRReservedSeatHeaderBookedDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetListBookedTrip(users_id);
+                foreach(var date in response.data)
+                {
+                    date.schedule_date_string = date.schedule_date.ToString("dddd, dd MMMM yyyy");
+                }
+
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
         /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>

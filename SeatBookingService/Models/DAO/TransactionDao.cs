@@ -18,40 +18,22 @@ namespace SeatBookingService.Models.DAO
 
         public List<MSSeatDto> GetListAllSeat(int trip_schedule_id)
         {
-            var query = @"select * from
-                                (
-	                                select 
-	                                c.id as seat_id,
-	                                c.no_bus,
-	                                c.seat_column,
-	                                c.seat_row,
-	                                a.users_id as booked_by,
-	                                CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
-	                                d.id as trip_schedule_id
-	                                from tr_reserved_seat_header a
-	                                left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
-	                                right join ms_seat c on c.id = b.seat_id
-	                                left join tr_trip_schedule d on d.id = a.trip_schedule_id
-	                                where d.id = @trip_schedule_id 
-	                            UNION
-	                                select 
-	                                c.id as seat_id,
-	                                c.no_bus,
-	                                c.seat_column,
-	                                c.seat_row,
-	                                a.users_id as booked_by,
-	                                CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
-	                                d.id as trip_schedule_id
-	                                from tr_reserved_seat_header a
-	                                left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
-	                                right join ms_seat c on c.id = b.seat_id
-	                                left join tr_trip_schedule d on d.id = a.trip_schedule_id
-	                                left join tr_bus_trip_schedule e on e.trip_schedule_id = d.id and e.no_bus = c.no_bus
-	                                where c.no_bus = (select no_bus from 
-						                                tr_bus_trip_schedule a
-						                                where a.trip_schedule_id = @trip_schedule_id)
-	                            ) a
-                            order by a.seat_id";
+            var query = @"select 
+	                        c.id as seat_id,
+	                        c.no_bus,
+	                        c.seat_column,
+	                        c.seat_row,
+	                        a.users_id,
+	                        CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
+	                        d.id as trip_schedule_id
+	                        from tr_reserved_seat_header a
+	                        left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
+	                        right join ms_seat c on c.id = b.seat_id
+	                        left join tr_trip_schedule d on d.id = a.trip_schedule_id
+	                        left join tr_bus_trip_schedule e on e.trip_schedule_id = d.id and e.no_bus = c.no_bus
+	                        where c.no_bus = (select no_bus from 
+						                        tr_bus_trip_schedule a
+						                        where a.trip_schedule_id = @trip_schedule_id)";
 
             var param = new Dictionary<string, object> {
                 { "trip_schedule_id", trip_schedule_id }
@@ -79,6 +61,29 @@ namespace SeatBookingService.Models.DAO
             };
 
             return _sQLHelper.queryList<TRBusAssignStatusDto>(query, param).Result;
+        }
+
+        public List<TRReservedSeatHeaderBookedDto> GetListBookedTrip(int users_id)
+        {
+            var query = @"select 
+	                        a.users_id,
+                            a.price,
+                            a.additional_information,
+                            c.no_bus,
+                            b.schedule_date,
+                            b.origin,
+                            b.destination
+                        from tr_reserved_seat_header a
+                        left join tr_trip_schedule b on a.trip_schedule_id = b.id
+                        left join tr_bus_trip_schedule c on c.trip_schedule_id = b.id 
+                        where a.users_id = @users_id
+                        order by a.created_date desc";
+
+            var param = new Dictionary<string, object> {
+                { "users_id", users_id }
+            };
+
+            return _sQLHelper.queryList<TRReservedSeatHeaderBookedDto>(query, param).Result;
         }
 
         public List<TRTripScheduleDto> GetListTripSchedule(TRTripSchedule obj)
