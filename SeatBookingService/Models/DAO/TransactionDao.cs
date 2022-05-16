@@ -122,6 +122,49 @@ namespace SeatBookingService.Models.DAO
             return result;
         }
 
+        public bool SubmitSeatBooking(TRReservedSeatHeaderDto obj)
+        {
+            bool result = false;
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            #region Insert into tr_trip_schedule
+            query = @"insert into tr_reserved_seat_header 
+                        (users_id, trip_schedule_id, price, additional_information, created_by, updated_by)
+                        values (@users_id, @trip_schedule_id, @price, @additional_information, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
+                    { "users_id", obj.users_id },
+                    { "trip_schedule_id", obj.trip_schedule_id },
+                    { "price", obj.price },
+                    { "additional_information", obj.additional_information },
+                    { "created_by", obj.users_id }
+                };
+
+            int reserved_seat_header_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
+            #endregion
+
+            #region Insert into tr_bus_trip_schedule
+            foreach(var item in obj.seat_detail)
+            {
+                query = @"insert into tr_reserved_seat 
+                        (seat_id, reserved_seat_header_id, created_by, updated_by)
+                        values (@seat_id, @reserved_seat_header_id, @created_by, @created_by)";
+
+                param = new Dictionary<string, object> {
+                    { "seat_id", item.seat_id },
+                    { "reserved_seat_header_id", reserved_seat_header_id },
+                    { "created_by", obj.users_id }
+                };
+
+                result = _sQLHelper.queryInsert(query, param).Result > 0;
+            }
+            
+            #endregion
+
+            return result;
+        }
+
         public bool SubmitTripSchedule(TRTripScheduleDto obj)
         {
             bool result = false;

@@ -432,6 +432,42 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk submit seat booking
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("SubmitSeatBooking")]
+        public async Task<IActionResult> SubmitSeatBooking(TRReservedSeatHeaderDto obj)
+        {
+            var response = new APIResult<List<TRReservedSeatHeaderDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.SubmitSeatBooking(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.SubmitSeatBooking(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>

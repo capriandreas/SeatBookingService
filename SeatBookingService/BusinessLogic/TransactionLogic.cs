@@ -63,5 +63,34 @@ namespace SeatBookingService.BusinessLogic
 
             return res;
         }
+
+        public static BusinessLogicResult SubmitSeatBooking(TRReservedSeatHeaderDto obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(obj.users_id.ToString()))
+            {
+                errMsg = "Users Id cannot be empty";
+            }
+            else if (string.IsNullOrWhiteSpace(obj.trip_schedule_id.ToString()))
+            {
+                errMsg = "Trip Schedule Id cannot be empty";
+            }
+            else if (obj.price <= 0 || string.IsNullOrWhiteSpace(obj.price.ToString()))
+            {
+                errMsg = "Price cannot be empty";
+            }
+            else if (obj.seat_detail.Count <= 0)
+            {
+                errMsg = "Seat Id cannot be empty";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
     }
 }

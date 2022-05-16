@@ -92,6 +92,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitSeatBooking(SeatBookingService.Models.DTO.TRReservedSeatHeaderDto)">
+            <summary>
+            Digunakan untuk submit seat booking
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data
