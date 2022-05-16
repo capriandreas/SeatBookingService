@@ -467,6 +467,12 @@ namespace SeatBookingService.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh trip yang sudah di booking oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
         [HttpGet]
         [Route("GetListBookedTrip")]
         public async Task<IActionResult> GetListBookedTrip([FromQuery] int users_id)

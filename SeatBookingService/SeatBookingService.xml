@@ -100,6 +100,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListBookedTrip(System.Int32)">
+            <summary>
+            Digunakan untuk menampilkan seluruh trip yang sudah di booking oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data
