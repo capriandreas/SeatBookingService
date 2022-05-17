@@ -66,6 +66,7 @@ namespace SeatBookingService.Models.DAO
         public List<TRReservedSeatHeaderBookedDto> GetListBookedTrip(int users_id)
         {
             var query = @"select 
+                            a.id,
 	                        a.users_id,
                             a.price,
                             a.additional_information,
@@ -103,6 +104,24 @@ namespace SeatBookingService.Models.DAO
             };
 
             return _sQLHelper.queryList<TRTripScheduleDto>(query, param).Result;
+        }
+
+        public List<MSSeatDetailDto> GetSeatDetail(int reserved_seat_header_id)
+        {
+            var query = @"select 
+	                        a.id,
+                            a.seat_id,
+                            b.seat_row,
+                            b.seat_column
+                        from tr_reserved_seat a
+                        left join ms_seat b on b.id = a.seat_id
+                        where a.reserved_seat_header_id  = @reserved_seat_header_id";
+
+            var param = new Dictionary<string, object> {
+                { "reserved_seat_header_id", reserved_seat_header_id }
+            };
+
+            return _sQLHelper.queryList<MSSeatDetailDto>(query, param).Result;
         }
 
         public bool InsertMasterSeat(List<MSSeat> obj)

@@ -15,5 +15,6 @@ namespace SeatBookingService.Models.DAO
         public List<MSSeatDto> GetListAllSeat(int trip_schedule_id);
         public bool SubmitSeatBooking(TRReservedSeatHeaderDto obj);
         public List<TRReservedSeatHeaderBookedDto> GetListBookedTrip(int users_id);
+        public List<MSSeatDetailDto> GetSeatDetail(int reserved_seat_header_id);
     }
 }

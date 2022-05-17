@@ -504,6 +504,37 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk menampilkan seluruh trip yang sudah di booking oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetSeatDetail")]
+        public async Task<IActionResult> GetSeatDetail([FromQuery] int reserved_seat_header_id)
+        {
+            var response = new APIResult<List<MSSeatDetailDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetSeatDetail(reserved_seat_header_id);
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>
