@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Folder Include="Const\" />
+    <Folder Include="Template\" />
     <Folder Include="PrintResult\" />
   </ItemGroup>
 
