@@ -124,6 +124,26 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<MSSeatDetailDto>(query, param).Result;
         }
 
+        public TicketDto GetTicketDataHeader(int reserved_seat_header_id)
+        {
+            var query = @"select 
+	                        b.schedule_date,
+                            b.origin,
+                            b.destination,
+                            c.no_bus,
+	                        a.price
+                        from tr_reserved_seat_header a
+                        left join tr_trip_schedule b on b.id = a.trip_schedule_id
+                        left join tr_bus_trip_schedule c on c.trip_schedule_id = b.id
+                        where a.id = @reserved_seat_header_id";
+
+            var param = new Dictionary<string, object> {
+                { "reserved_seat_header_id", reserved_seat_header_id }
+            };
+
+            return _sQLHelper.querySingle<TicketDto>(query, param).Result;
+        }
+
         public bool InsertMasterSeat(List<MSSeat> obj)
         {
             string query = string.Empty;

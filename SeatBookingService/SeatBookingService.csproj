@@ -5,12 +5,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Seat Booking\SeatBookingService\SeatBookingService\SeatBookingService.xml</DocumentationFile>
+    <DocumentationFile>C:\Development\Bintut Seat Booking\Backend\SeatBookingService\SeatBookingService.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Const\" />
+    <Folder Include="PrintResult\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +19,7 @@
     <PackageReference Include="MySqlConnector" Version="2.1.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
 

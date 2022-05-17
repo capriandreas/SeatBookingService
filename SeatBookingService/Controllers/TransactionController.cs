@@ -7,10 +7,11 @@ using SeatBookingService.Helper;
 using SeatBookingService.Models;
 using SeatBookingService.Models.DAO;
 using SeatBookingService.Models.DTO;
+using SeatBookingService.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
+using System.Drawing;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -529,6 +530,55 @@ namespace SeatBookingService.Controllers
             {
                 response.is_ok = false;
                 response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk print ticket
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("PrintTicket")]
+        public async Task<IActionResult> PrintTicket([FromQuery] int reserved_seat_header_id)
+        {
+            var response = new APIResult<List<TicketDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+            TicketDto ticket = new TicketDto();
+            try
+            {
+                Byte[] b;
+
+                //Get Header
+                ticket = _transactionDao.GetTicketDataHeader(reserved_seat_header_id);
+
+                //Get Detail Ticket
+                List<MSSeatDetailDto> detail = _transactionDao.GetSeatDetail(reserved_seat_header_id);
+                ticket.ticket_seat_detail = new List<TicketSeatDetail>();
+
+                foreach (var item in detail)
+                {
+                    ticket.ticket_seat_detail.Add(new TicketSeatDetail
+                    {
+                        seat_id = item.seat_id,
+                        seat_column = item.seat_column,
+                        seat_row = item.seat_row
+                    });
+                }
+
+                ticket.total_price = ticket.price * detail.Count;
+
+                Image image = GenerateTicket.DrawTicket(ticket, Color.Black, Color.White);
+                b = GenerateTicket.ImageToByteArray(image);
+
+                return File(b, "image/jpeg");
+            }
+            catch(Exception ex)
+            {
+
             }
 
             return Ok(response);
