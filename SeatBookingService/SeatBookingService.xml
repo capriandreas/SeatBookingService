@@ -28,6 +28,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllListUsers">
+            <summary>
+            Digunakan untuk menampilkan seluruh list User selain User Admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
             <summary>
             Digunakan untuk create user agen dan pengemudi oleh user admin
@@ -71,6 +79,54 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.GetListTripSchedule(SeatBookingService.Models.TRTripSchedule)">
             <summary>
             Digunakan untuk menampilkan seluruh jadwal trip yang telah dibuat oleh admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListAllSeat(System.Int32)">
+            <summary>
+            Digunakan untuk menampilkan seluruh data seat berdasarkan trip schedule id
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitSeatBooking(SeatBookingService.Models.DTO.TRReservedSeatHeaderDto)">
+            <summary>
+            Digunakan untuk submit seat booking
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListBookedTrip(System.Int32)">
+            <summary>
+            Digunakan untuk menampilkan seluruh trip yang sudah di booking oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetSeatDetail(System.Int32)">
+            <summary>
+            Digunakan untuk menampilkan seluruh trip yang sudah di booking oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.PrintTicket(System.Int32)">
+            <summary>
+            Digunakan untuk print ticket
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
+            <summary>
+            Digunakan untuk generate seat untuk master data
             </summary>
             <returns>
             
