@@ -17,5 +17,6 @@ namespace SeatBookingService.Models.DAO
         public List<TRReservedSeatHeaderBookedDto> GetListBookedTrip(int users_id);
         public List<MSSeatDetailDto> GetSeatDetail(int reserved_seat_header_id);
         public TicketDto GetTicketDataHeader(int reserved_seat_header_id);
+        public LoginResultDto GetDataLogin(MSUsers obj);
     }
 }

@@ -16,6 +16,21 @@ namespace SeatBookingService.Models.DAO
             _sQLHelper = sQLHelper;
         }
 
+        public LoginResultDto GetDataLogin(MSUsers obj)
+        {
+            var query = @"select a.id, username, nickname, role_id, rolename
+                        from ms_users a
+                        left join ms_roles b on a.role_id = b.id
+                        where username = @username and password = @password and is_active = 1";
+
+            var param = new Dictionary<string, object> {
+                { "username", obj.username },
+                { "password", obj.password }
+            };
+
+            return _sQLHelper.querySingle<LoginResultDto>(query, param).Result;
+        }
+
         public List<MSSeatDto> GetListAllSeat(int trip_schedule_id)
         {
             var query = @"select 

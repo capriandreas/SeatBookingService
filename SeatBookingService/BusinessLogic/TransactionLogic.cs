@@ -92,5 +92,26 @@ namespace SeatBookingService.BusinessLogic
 
             return res;
         }
+
+        public static BusinessLogicResult Login(MSUsers obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(obj.username))
+            {
+                errMsg = "Username cannot be empty";
+            }
+            else if (string.IsNullOrWhiteSpace(obj.password))
+            {
+                errMsg = "Password cannot be empty";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
     }
 }

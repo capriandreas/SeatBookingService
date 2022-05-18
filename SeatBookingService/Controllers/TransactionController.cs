@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
 using SeatBookingService.BusinessLogic;
 using SeatBookingService.Helper;
@@ -12,7 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,12 +35,84 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk create user agen dan pengemudi oleh user admin
+        /// Digunakan untuk Login
         /// </summary>
         /// <returns>
         /// 
         /// </returns>
         [AllowAnonymous]
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login(MSUsers user)
+        {
+            var response = new APIResult<LoginResultDto>();
+            string errMsg = string.Empty;
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.Login(user);
+
+                if (res.result)
+                {
+                    user.password = EncryptionHelper.sha256(user.password);
+
+                    LoginResultDto userDto = _transactionDao.GetDataLogin(user);
+
+                    if (userDto != null)
+                    {
+                        #region Generate JWT Token
+                        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+                        var claims = new[]{
+                            new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                            new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
+                            new Claim("username", userDto.username),
+                            new Claim("nickname", userDto.nickname),
+                            new Claim("rolename", userDto.rolename)
+                        };
+
+                        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+                          _configuration["Jwt:Audience"],
+                          claims,
+                          expires: DateTime.Now.AddMinutes(15),
+                          signingCredentials: credentials);
+
+                        userDto.token = new JwtSecurityTokenHandler().WriteToken(token);
+
+                        response.data = userDto;
+                        #endregion
+                    }
+                    else
+                    {
+                        response.message = "Login Failed";
+                        response.httpCode = HttpStatusCode.OK;
+                        response.is_ok = true;
+                        return Ok(response);
+                    }
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk create user agen dan pengemudi oleh user admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
         [HttpPost]
         [Route("CreateUser")]
         public async Task<IActionResult> CreateUser(MSUsers user)
@@ -147,99 +222,11 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk Login
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login(MSUsers user)
-        {
-            var response = new APIResult<DataTable>();
-            string errMsg = string.Empty;
-
-            try
-            {
-                #region Validation
-                if (string.IsNullOrWhiteSpace(user.username))
-                {
-                    errMsg = "Username cannot be empty";
-                }
-                else if (string.IsNullOrWhiteSpace(user.password))
-                {
-                    errMsg = "Password cannot be empty";
-                }
-
-                if (!string.IsNullOrEmpty(errMsg))
-                {
-                    response.httpCode = HttpStatusCode.OK;
-                    response.is_ok = false;
-                    response.message = errMsg;
-                    return Ok(response);
-                }
-                #endregion
-
-                string encryptPassword = EncryptionHelper.sha256(user.password);
-
-                string query = @"
-                        select a.id, username, nickname, role_id, rolename
-                        from ms_users a
-                        left join ms_roles b on a.role_id = b.id
-                        where username = @username and password = @password and is_active = 1;
-                ";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                MySqlDataReader myReader;
-                using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
-                {
-                    mycon.Open();
-                    using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
-                    {
-                        myCommand.Parameters.AddWithValue("@username", user.username);
-                        myCommand.Parameters.AddWithValue("@password", encryptPassword);
-
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-
-                        myReader.Close();
-                        mycon.Close();
-                    }
-                }
-
-                response.httpCode = HttpStatusCode.OK;
-                response.data = table;
-                response.data_records = table.Rows.Count;
-
-                if (table.Rows.Count > 0)
-                {
-                    response.is_ok = true;
-                    response.message = "Login Successfully";
-                }
-                else
-                {
-                    response.is_ok = false;
-                    response.message = "Login Failed";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Digunakan untuk assign bus status per tanggal
         /// </summary>
         /// <returns>
         /// 
         /// </returns>
-        [AllowAnonymous]
         [HttpPost]
         [Route("AssignBusStatus")]
         public async Task<IActionResult> AssignBusStatus(List<TRBusAssignStatus> bus)
