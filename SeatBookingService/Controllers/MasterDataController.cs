@@ -11,9 +11,11 @@ using MySqlConnector;
 using System.Net;
 using SeatBookingService.Models.DAO;
 using SeatBookingService.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SeatBookingService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MasterDataController : ControllerBase

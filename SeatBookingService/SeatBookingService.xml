@@ -4,6 +4,14 @@
         <name>SeatBookingService</name>
     </assembly>
     <members>
+        <member name="M:SeatBookingService.Controllers.AccountController.Login(SeatBookingService.Models.MSUsers)">
+            <summary>
+            Digunakan untuk Login
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllMasterBus">
             <summary>
             Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
@@ -39,14 +47,6 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
             <summary>
             Digunakan untuk create user agen dan pengemudi oleh user admin
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.Login(SeatBookingService.Models.MSUsers)">
-            <summary>
-            Digunakan untuk Login
             </summary>
             <returns>
             
