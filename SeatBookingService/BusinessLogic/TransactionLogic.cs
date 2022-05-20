@@ -2,6 +2,7 @@
 using SeatBookingService.Models.DTO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SeatBookingService.BusinessLogic
 {
@@ -70,6 +71,7 @@ namespace SeatBookingService.BusinessLogic
             BusinessLogicResult res = new BusinessLogicResult();
 
             string errMsg = string.Empty;
+            List<string> seatRowColumn = new List<string>();
 
             if (string.IsNullOrWhiteSpace(obj.users_id.ToString()))
             {
@@ -86,6 +88,15 @@ namespace SeatBookingService.BusinessLogic
             else if (obj.seat_detail.Count <= 0)
             {
                 errMsg = "Seat Id cannot be empty";
+            }
+            else if(seat.Count > 0)
+            {
+                foreach (var item in seat)
+                {
+                    seatRowColumn.Add(item.seat_column + item.seat_row);
+                }
+
+                errMsg = "Bangku " + string.Join(",", seatRowColumn) + " sudah dipesan";
             }
 
             res.result = !string.IsNullOrEmpty(errMsg) ? false : true;

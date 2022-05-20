@@ -31,13 +31,14 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.querySingle<LoginResultDto>(query, param).Result;
         }
 
-        public List<TRReservedSeatHeader2Dto> GetDataSeatValidation(int trip_schedule_id)
+        public List<TRReservedSeatHeader2Dto> GetDataSeatValidation(int trip_schedule_id, string joinSeatId)
         {
-            var query = @"select a.seat_id, a.reserved_seat_header_id, b.trip_schedule_id
+            var query = @"select a.seat_id, a.reserved_seat_header_id, b.trip_schedule_id, d.seat_column, d.seat_row
                             from tr_reserved_seat a
                             left join tr_reserved_seat_header b on b.id = a.reserved_seat_header_id
                             left join tr_trip_schedule c on c.id = b.trip_schedule_id
-                            where b.trip_schedule_id = @trip_schedule_id";
+                            left join ms_seat d on d.id = a.seat_id
+                            where b.trip_schedule_id = @trip_schedule_id and a.seat_id in (" + joinSeatId + ")";
 
             var param = new Dictionary<string, object> {
                 { "trip_schedule_id", trip_schedule_id }

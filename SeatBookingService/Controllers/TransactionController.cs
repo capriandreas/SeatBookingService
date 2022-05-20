@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -362,7 +363,8 @@ namespace SeatBookingService.Controllers
 
             try
             {
-                List<TRReservedSeatHeader2Dto> tRReservedSeatHeader2Dtos = _transactionDao.GetDataSeatValidation(obj.trip_schedule_id);
+                string joinSeatId = string.Join(",", obj.seat_detail.Select(x => x.seat_id));
+                List<TRReservedSeatHeader2Dto> tRReservedSeatHeader2Dtos = _transactionDao.GetDataSeatValidation(obj.trip_schedule_id, joinSeatId);
                 res = TransactionLogic.SubmitSeatBooking(obj, tRReservedSeatHeader2Dtos);
 
                 if (res.result)
