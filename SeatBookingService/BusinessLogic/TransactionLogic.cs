@@ -1,6 +1,7 @@
 ﻿using SeatBookingService.Models;
 using SeatBookingService.Models.DTO;
 using System;
+using System.Collections.Generic;
 
 namespace SeatBookingService.BusinessLogic
 {
@@ -64,7 +65,7 @@ namespace SeatBookingService.BusinessLogic
             return res;
         }
 
-        public static BusinessLogicResult SubmitSeatBooking(TRReservedSeatHeaderDto obj)
+        public static BusinessLogicResult SubmitSeatBooking(TRReservedSeatHeaderDto obj, List<TRReservedSeatHeader2Dto> seat)
         {
             BusinessLogicResult res = new BusinessLogicResult();
 

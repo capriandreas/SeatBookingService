@@ -362,7 +362,8 @@ namespace SeatBookingService.Controllers
 
             try
             {
-                res = TransactionLogic.SubmitSeatBooking(obj);
+                List<TRReservedSeatHeader2Dto> tRReservedSeatHeader2Dtos = _transactionDao.GetDataSeatValidation(obj.trip_schedule_id);
+                res = TransactionLogic.SubmitSeatBooking(obj, tRReservedSeatHeader2Dtos);
 
                 if (res.result)
                 {
