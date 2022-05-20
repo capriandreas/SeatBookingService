@@ -182,7 +182,7 @@ namespace SeatBookingService.Controllers
 
                 string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
 
-                StringBuilder sCommand = new StringBuilder("insert into tr_bus_assign_status (no_bus, status_bus_id, status_date) values ");
+                StringBuilder sCommand = new StringBuilder("insert into tr_bus_assign_status (no_bus, status_bus_id, assign_date) values ");
 
                 using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
                 {
