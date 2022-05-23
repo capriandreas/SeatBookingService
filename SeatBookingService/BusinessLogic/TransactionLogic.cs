@@ -125,5 +125,30 @@ namespace SeatBookingService.BusinessLogic
 
             return res;
         }
+
+        public static BusinessLogicResult SubmitExpedisi(TRExpedition obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (obj.price <= 0 || string.IsNullOrEmpty(obj.price.ToString()))
+            {
+                errMsg = "Price cannot be empty";
+            }
+            else if (string.IsNullOrWhiteSpace(obj.goods_type))
+            {
+                errMsg = "Goods Type cannot be empty";
+            }
+            else if (string.IsNullOrWhiteSpace(obj.volume))
+            {
+                errMsg = "Volume cannot be empty";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
     }
 }

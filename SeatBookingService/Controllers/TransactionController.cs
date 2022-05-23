@@ -503,6 +503,72 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk submit expedisi barang oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("SubmitExpedisi")]
+        public async Task<IActionResult> SubmitExpedisi(TRExpedition obj)
+        {
+            var response = new APIResult<List<TRExpedition>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.SubmitExpedisi(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.SubmitExpedition(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk submit expedisi barang oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetExpedition")]
+        public async Task<IActionResult> GetExpedition([FromQuery] TRExpedition obj)
+        {
+            var response = new APIResult<List<TRExpeditionDto>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetExpedition(obj);
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>

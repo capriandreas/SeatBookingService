@@ -124,6 +124,22 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitExpedisi(SeatBookingService.Models.TRExpedition)">
+            <summary>
+            Digunakan untuk submit expedisi barang oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetExpedition(SeatBookingService.Models.TRExpedition)">
+            <summary>
+            Digunakan untuk submit expedisi barang oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data

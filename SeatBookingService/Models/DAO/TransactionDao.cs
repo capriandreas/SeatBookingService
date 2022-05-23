@@ -47,6 +47,20 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<TRReservedSeatHeader2Dto>(query, param).Result;
         }
 
+        public List<TRExpeditionDto> GetExpedition(TRExpedition obj)
+        {
+            var query = @"select a.users_id, a.trip_schedule_id, a.price, a.goods_type, a.volume, a.additional_information
+                            from tr_expedition a
+                            where a.users_id = @users_id and a.trip_schedule_id = @trip_schedule_id";
+
+            var param = new Dictionary<string, object> {
+                { "users_id", obj.users_id },
+                { "trip_schedule_id", obj.trip_schedule_id },
+            };
+
+            return _sQLHelper.queryList<TRExpeditionDto>(query, param).Result;
+        }
+
         public List<MSSeatDto> GetListAllSeat(int trip_schedule_id)
         {
             var query = @"select 
@@ -197,13 +211,39 @@ namespace SeatBookingService.Models.DAO
             return result;
         }
 
+        public bool SubmitExpedition(TRExpedition obj)
+        {
+            bool result = false;
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            #region Insert into tr_reserved_seat_header
+            query = @"insert into tr_expedition 
+                        (users_id, trip_schedule_id, price, goods_type, volume, additional_information, created_by, updated_by)
+                        values (@users_id, @trip_schedule_id, @price, @goods_type, @volume, @additional_information, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
+                    { "users_id", obj.users_id },
+                    { "trip_schedule_id", obj.trip_schedule_id },
+                    { "price", obj.price },
+                    { "goods_type", obj.goods_type },
+                    { "volume", obj.volume },
+                    { "additional_information", obj.additional_information },
+                    { "created_by", obj.users_id }
+                };
+
+            #endregion
+
+            return _sQLHelper.queryInsert(query, param).Result > 0;
+        }
+
         public bool SubmitSeatBooking(TRReservedSeatHeaderDto obj)
         {
             bool result = false;
             var query = string.Empty;
             var param = new Dictionary<string, object>();
 
-            #region Insert into tr_trip_schedule
+            #region Insert into tr_reserved_seat_header
             query = @"insert into tr_reserved_seat_header 
                         (users_id, trip_schedule_id, price, additional_information, created_by, updated_by)
                         values (@users_id, @trip_schedule_id, @price, @additional_information, @created_by, @created_by)";
@@ -219,8 +259,8 @@ namespace SeatBookingService.Models.DAO
             int reserved_seat_header_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
             #endregion
 
-            #region Insert into tr_bus_trip_schedule
-            foreach(var item in obj.seat_detail)
+            #region Insert into tr_reserved_seat
+            foreach (var item in obj.seat_detail)
             {
                 query = @"insert into tr_reserved_seat 
                         (seat_id, reserved_seat_header_id, created_by, updated_by)

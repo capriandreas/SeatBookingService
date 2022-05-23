@@ -19,5 +19,7 @@ namespace SeatBookingService.Models.DAO
         public TicketDto GetTicketDataHeader(int reserved_seat_header_id);
         public LoginResultDto GetDataLogin(MSUsers obj);
         public List<TRReservedSeatHeader2Dto> GetDataSeatValidation(int trip_schedule_id, string joinSeatId);
+        public bool SubmitExpedition(TRExpedition obj);
+        public List<TRExpeditionDto> GetExpedition(TRExpedition obj);
     }
 }
