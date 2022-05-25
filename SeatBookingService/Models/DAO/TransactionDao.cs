@@ -61,6 +61,34 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<TRExpeditionDto>(query, param).Result;
         }
 
+        public List<HistoryDetailDto> GetHistoryDetail(int trip_schedule_id)
+        {
+            var query = @"select distinct a.id, a.schedule_date, a.origin, a.destination, b.users_id
+                            from tr_trip_schedule a
+                            left join tr_reserved_seat_header b on a.id = b.trip_schedule_id
+                            where b.users_id = @users_id";
+
+            var param = new Dictionary<string, object> {
+                { "trip_schedule_id", trip_schedule_id }
+            };
+
+            return _sQLHelper.queryList<HistoryDetailDto>(query, param).Result;
+        }
+
+        public List<HistoryHeaderDto> GetHistoryHeader(int users_id)
+        {
+            var query = @"select distinct a.id, a.schedule_date, a.origin, a.destination, b.users_id
+                            from tr_trip_schedule a
+                            left join tr_reserved_seat_header b on a.id = b.trip_schedule_id
+                            where b.users_id = @users_id";
+
+            var param = new Dictionary<string, object> {
+                { "users_id", users_id }
+            };
+
+            return _sQLHelper.queryList<HistoryHeaderDto>(query, param).Result;
+        }
+
         public List<MSSeatDto> GetListAllSeat(int trip_schedule_id)
         {
             var query = @"select 
