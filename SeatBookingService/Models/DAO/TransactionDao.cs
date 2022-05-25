@@ -75,6 +75,20 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<HistoryDetailDto>(query, param).Result;
         }
 
+        public List<HistoryExpeditionDetailDto> GetHistoryExpeditionDetail(int trip_schedule_id, int users_id)
+        {
+            var query = @"select a.id, a.price, a.goods_type, a.volume, a.additional_information
+                            from tr_expedition a
+                            where a.users_id = @users_id and a.trip_schedule_id = @trip_schedule_id";
+
+            var param = new Dictionary<string, object> {
+                { "trip_schedule_id", trip_schedule_id },
+                { "users_id", users_id }
+            };
+
+            return _sQLHelper.queryList<HistoryExpeditionDetailDto>(query, param).Result;
+        }
+
         public List<HistoryHeaderDto> GetHistoryHeader(int users_id)
         {
             var query = @"select distinct b.trip_schedule_id, a.schedule_date, a.origin, a.destination, b.users_id

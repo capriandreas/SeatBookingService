@@ -662,21 +662,21 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk get history seat detail
+        /// Digunakan untuk get history expedition detail
         /// </summary>
         /// <returns>
         /// 
         /// </returns>
         [HttpGet]
         [Route("GetHistoryExpeditionDetail")]
-        public async Task<IActionResult> GetHistoryExpeditionDetail([FromQuery] int reserved_seat_header_id)
+        public async Task<IActionResult> GetHistoryExpeditionDetail([FromQuery] int trip_schedule_id, int users_id)
         {
-            var response = new APIResult<List<HistorySeatDetailDto>>();
+            var response = new APIResult<List<HistoryExpeditionDetailDto>>();
             var res = new BusinessLogicResult();
 
             try
             {
-                response.data = _transactionDao.GetHistorySeatDetail(reserved_seat_header_id);
+                response.data = _transactionDao.GetHistoryExpeditionDetail(trip_schedule_id, users_id);
                 response.data_records = response.data.Count;
 
                 response.is_ok = true;
