@@ -4,7 +4,7 @@ namespace SeatBookingService.Models.DTO
 {
     public class HistoryHeaderDto
     {
-        public int id { get; set; }
+        public int trip_schedule_id { get; set; }
         public int users_id { get; set; }
         public DateTime schedule_date { get; set; }
         public string origin { get; set; }

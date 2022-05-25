@@ -148,7 +148,7 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.GetHistoryDetail(System.Int32)">
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetHistoryDetail(System.Int32,System.Int32)">
             <summary>
             Digunakan untuk get history detail
             </summary>
