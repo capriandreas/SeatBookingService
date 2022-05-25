@@ -23,5 +23,7 @@ namespace SeatBookingService.Models.DAO
         public List<TRExpeditionDto> GetExpedition(TRExpedition obj);
         public List<HistoryHeaderDto> GetHistoryHeader(int users_id);
         public List<HistoryDetailDto> GetHistoryDetail(int trip_schedule_id, int users_id);
+        public List<HistorySeatDetailDto> GetHistorySeatDetail(int reserved_seat_header_id);
+        public List<HistorySeatDetailDto> GetHistoryExpeditionDetail(int reserved_seat_header_id);
     }
 }
