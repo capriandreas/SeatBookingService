@@ -180,6 +180,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListCancelSeat">
+            <summary>
+            Digunakan oleh admin untuk get list cancel yang dilakukan agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data

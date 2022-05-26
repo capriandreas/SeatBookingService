@@ -728,6 +728,37 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan oleh admin untuk get list cancel yang dilakukan agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetListCancelSeat")]
+        public async Task<IActionResult> GetListCancelSeat()
+        {
+            var response = new APIResult<List<TRCancellationDto>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetListCancelSeat();
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>

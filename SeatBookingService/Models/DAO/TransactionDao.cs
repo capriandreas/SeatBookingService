@@ -208,6 +208,17 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<TRReservedSeatHeaderBookedDto>(query, param).Result;
         }
 
+        public List<TRCancellationDto> GetListCancelSeat()
+        {
+            var query = @"select a.reserved_seat_id, a.status_seat_id, b.status_name, a.action_id, c.action_name, a.reason
+                            from tr_cancellation a 
+                            left join ms_status_seat b on b.id = a.status_seat_id
+                            left join ms_action c on c.id = a.action_id
+                            where a.action_id is null";
+
+            return _sQLHelper.queryList<TRCancellationDto>(query, null).Result;
+        }
+
         public List<TRTripScheduleDto> GetListTripSchedule(TRTripSchedule obj)
         {
             var query = @"select 
