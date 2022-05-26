@@ -759,6 +759,76 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk action approve cancel seat oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("ApproveCancelSeat")]
+        public async Task<IActionResult> ApproveCancelSeat([FromBody] TRCancellation obj)
+        {
+            var response = new APIResult<List<TRCancellation>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.ApproveCancelSeat(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.ApproveCancelSeat(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk action reject cancel seat oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("RejectCancelSeat")]
+        public async Task<IActionResult> RejectCancelSeat([FromBody] TRCancellation obj)
+        {
+            var response = new APIResult<List<TRCancellation>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.RejectCancelSeat(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.RejectCancelSeat(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>

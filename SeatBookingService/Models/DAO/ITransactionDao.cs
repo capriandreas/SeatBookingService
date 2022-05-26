@@ -27,5 +27,7 @@ namespace SeatBookingService.Models.DAO
         public List<HistoryExpeditionDetailDto> GetHistoryExpeditionDetail(int trip_schedule_id, int users_id);
         public bool CancelSeat(TRCancellation obj);
         public List<TRCancellationDto> GetListCancelSeat();
+        public bool ApproveCancelSeat(TRCancellation obj);
+        public bool RejectCancelSeat(TRCancellation obj);
     }
 }

@@ -16,12 +16,41 @@ namespace SeatBookingService.Models.DAO
             _sQLHelper = sQLHelper;
         }
 
+        public bool ApproveCancelSeat(TRCancellation obj)
+        {
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            //Set status_seat_id menjadi canceled dan action_id menjadi approved
+            query = @"update tr_cancellation set status_seat_id = 1, action_id = 1 where id = @id";
+
+            param = new Dictionary<string, object> {
+                    { "id", obj.id }
+                };
+
+            return _sQLHelper.queryUpdate(query, param).Result > 0;
+        }
+
+        public bool RejectCancelSeat(TRCancellation obj)
+        {
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            //Set status_seat_id menjadi rejected dan action_id menjadi reject
+            query = @"update tr_cancellation set status_seat_id = 3, action_id = 2 where id = @id";
+
+            param = new Dictionary<string, object> {
+                    { "id", obj.id }
+                };
+
+            return _sQLHelper.queryUpdate(query, param).Result > 0;
+        }
+
         public bool CancelSeat(TRCancellation obj)
         {
             var query = string.Empty;
             var param = new Dictionary<string, object>();
 
-            #region Insert into tr_reserved_seat_header
             query = @"insert into tr_cancellation 
                         (reserved_seat_id, status_seat_id, reason, created_by, updated_by)
                         values (@reserved_seat_id, 2, @reason, (select created_by from tr_reserved_seat where id = @reserved_seat_id), (select created_by from tr_reserved_seat where id = @reserved_seat_id))";
@@ -30,8 +59,6 @@ namespace SeatBookingService.Models.DAO
                     { "reserved_seat_id", obj.reserved_seat_id },
                     { "reason", obj.reason }
                 };
-
-            #endregion
 
             return _sQLHelper.queryInsert(query, param).Result > 0;
         }
@@ -140,18 +167,23 @@ namespace SeatBookingService.Models.DAO
         public List<MSSeatDto> GetListAllSeat(int trip_schedule_id)
         {
             var query = @"select 
+							b.id as reserved_seat_id,
 	                        c.id as seat_id,
 	                        c.no_bus,
 	                        c.seat_column,
 	                        c.seat_row,
 	                        a.users_id,
-	                        CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
-	                        d.id as trip_schedule_id
+	                        CASE WHEN a.id is null or f.status_seat_id = 1 then 'Available' else 'Booked' end as seat_status,
+	                        d.id as trip_schedule_id,
+							g.status_name,
+                            f.reason
 	                        from tr_reserved_seat_header a
 	                        left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
 	                        right join ms_seat c on c.id = b.seat_id
 	                        left join tr_trip_schedule d on d.id = a.trip_schedule_id
 	                        left join tr_bus_trip_schedule e on e.trip_schedule_id = d.id and e.no_bus = c.no_bus
+                            left join tr_cancellation f on f.reserved_seat_id = b.id
+                            left join ms_status_seat g on g.id = f.status_seat_id
 	                        where c.no_bus = (select no_bus from 
 						                        tr_bus_trip_schedule a
 						                        where a.trip_schedule_id = @trip_schedule_id)";
@@ -210,7 +242,7 @@ namespace SeatBookingService.Models.DAO
 
         public List<TRCancellationDto> GetListCancelSeat()
         {
-            var query = @"select a.reserved_seat_id, a.status_seat_id, b.status_name, a.action_id, c.action_name, a.reason
+            var query = @"select a.id, a.reserved_seat_id, a.status_seat_id, b.status_name, a.action_id, c.action_name, a.reason
                             from tr_cancellation a 
                             left join ms_status_seat b on b.id = a.status_seat_id
                             left join ms_action c on c.id = a.action_id

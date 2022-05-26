@@ -2,6 +2,7 @@
 {
     public class TRCancellationDto
     {
+        public int id { get; set; }
         public int reserved_seat_id { get; set; }
         public int status_seat_id { get; set; }
         public string status_name { get; set; }

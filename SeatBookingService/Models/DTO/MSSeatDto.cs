@@ -9,5 +9,7 @@
         public int? booked_by { get; set; }
         public string seat_status { get; set; }
         public int? trip_schedule_id { get; set; }
+        public string status_name { get; set; }
+        public string reason { get; set; }
     }
 }
