@@ -16,6 +16,26 @@ namespace SeatBookingService.Models.DAO
             _sQLHelper = sQLHelper;
         }
 
+        public bool CancelSeat(TRCancellation obj)
+        {
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            #region Insert into tr_reserved_seat_header
+            query = @"insert into tr_cancellation 
+                        (reserved_seat_id, status_seat_id, reason, created_by, updated_by)
+                        values (@reserved_seat_id, 2, @reason, (select created_by from tr_reserved_seat where id = @reserved_seat_id), (select created_by from tr_reserved_seat where id = @reserved_seat_id))";
+
+            param = new Dictionary<string, object> {
+                    { "reserved_seat_id", obj.reserved_seat_id },
+                    { "reason", obj.reason }
+                };
+
+            #endregion
+
+            return _sQLHelper.queryInsert(query, param).Result > 0;
+        }
+
         public LoginResultDto GetDataLogin(MSUsers obj)
         {
             var query = @"select a.id, username, nickname, role_id, rolename

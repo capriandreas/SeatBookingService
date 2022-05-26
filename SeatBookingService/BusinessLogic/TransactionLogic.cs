@@ -150,5 +150,22 @@ namespace SeatBookingService.BusinessLogic
 
             return res;
         }
+
+        public static BusinessLogicResult CancelSeat(TRCancellation obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (string.IsNullOrEmpty(obj.reserved_seat_id.ToString()))
+            {
+                errMsg = "Reserved Seat ID cannot be empty";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
     }
 }

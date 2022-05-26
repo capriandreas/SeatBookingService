@@ -693,6 +693,41 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk cancel seat oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("CancelSeat")]
+        public async Task<IActionResult> CancelSeat(TRCancellation obj)
+        {
+            var response = new APIResult<List<TRCancellation>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.CancelSeat(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.CancelSeat(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>
