@@ -1,4 +1,6 @@
-﻿namespace SeatBookingService.Models.DTO
+﻿using System;
+
+namespace SeatBookingService.Models.DTO
 {
     public class TRCancellationDto
     {
@@ -9,5 +11,11 @@
         public int action_id { get; set; }
         public string action_name { get; set; }
         public string reason { get; set; }
+        public string no_bus { get; set; }
+        public string origin { get; set; }
+        public string destination { get; set; }
+        public DateTime schedule_date { get; set; }
+        public string seat_column { get; set; }
+        public string seat_row { get; set; }
     }
 }

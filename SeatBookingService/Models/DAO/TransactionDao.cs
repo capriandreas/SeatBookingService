@@ -242,11 +242,29 @@ namespace SeatBookingService.Models.DAO
 
         public List<TRCancellationDto> GetListCancelSeat()
         {
-            var query = @"select a.id, a.reserved_seat_id, a.status_seat_id, b.status_name, a.action_id, c.action_name, a.reason
-                            from tr_cancellation a 
-                            left join ms_status_seat b on b.id = a.status_seat_id
-                            left join ms_action c on c.id = a.action_id
-                            where a.action_id is null";
+            var query = @"select 
+			                a.id, 
+			                a.reserved_seat_id, 
+			                a.status_seat_id, 
+			                b.status_name, 
+			                a.action_id, 
+			                c.action_name, 
+			                a.reason,
+                            h.no_bus,
+                            f.origin,
+                            f.destination,
+                            f.schedule_date,
+                            g.seat_column,
+                            g.seat_row
+		                from tr_cancellation a 
+		                left join ms_status_seat b on b.id = a.status_seat_id
+		                left join ms_action c on c.id = a.action_id
+		                left join tr_reserved_seat d on d.id = a.reserved_seat_id
+		                left join tr_reserved_seat_header e on e.id = d.reserved_seat_header_id
+		                left join tr_trip_schedule f on f.id = e.trip_schedule_id
+                        left join ms_seat g on g.id = d.seat_id
+                        left join tr_bus_trip_schedule h on h.trip_schedule_id = f.id
+		                where a.action_id is null";
 
             return _sQLHelper.queryList<TRCancellationDto>(query, null).Result;
         }
