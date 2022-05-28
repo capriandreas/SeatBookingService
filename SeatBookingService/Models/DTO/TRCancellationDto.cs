@@ -17,5 +17,6 @@ namespace SeatBookingService.Models.DTO
         public DateTime schedule_date { get; set; }
         public string seat_column { get; set; }
         public string seat_row { get; set; }
+        public string nickname { get; set; }
     }
 }

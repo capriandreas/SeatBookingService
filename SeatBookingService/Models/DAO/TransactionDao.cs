@@ -138,9 +138,10 @@ namespace SeatBookingService.Models.DAO
 
         public List<HistoryHeaderDto> GetHistoryHeader(int users_id)
         {
-            var query = @"select distinct b.trip_schedule_id, a.schedule_date, a.origin, a.destination, b.users_id
+            var query = @"select distinct b.trip_schedule_id, a.schedule_date, a.origin, a.destination, b.users_id, c.no_bus
                             from tr_trip_schedule a
                             left join tr_reserved_seat_header b on a.id = b.trip_schedule_id
+                            left join tr_bus_trip_schedule c on c.trip_schedule_id = a.id
                             where b.users_id = @users_id";
 
             var param = new Dictionary<string, object> {
@@ -255,7 +256,8 @@ namespace SeatBookingService.Models.DAO
                             f.destination,
                             f.schedule_date,
                             g.seat_column,
-                            g.seat_row
+                            g.seat_row,
+                            i.nickname
 		                from tr_cancellation a 
 		                left join ms_status_seat b on b.id = a.status_seat_id
 		                left join ms_action c on c.id = a.action_id
@@ -264,6 +266,7 @@ namespace SeatBookingService.Models.DAO
 		                left join tr_trip_schedule f on f.id = e.trip_schedule_id
                         left join ms_seat g on g.id = d.seat_id
                         left join tr_bus_trip_schedule h on h.trip_schedule_id = f.id
+                        left join ms_users i on i.id = d.created_by
 		                where a.action_id is null";
 
             return _sQLHelper.queryList<TRCancellationDto>(query, null).Result;
