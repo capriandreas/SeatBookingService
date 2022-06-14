@@ -62,7 +62,7 @@ namespace SeatBookingService.Models.DAO
 
         public List<MSRolesDto> GetAllMasterRoles()
         {
-            var query = @"select id, rolename from ms_roles";
+            var query = @"select id, rolename from ms_roles where rolename not in ('SuperAdmin')";
 
             return _sQLHelper.queryList<MSRolesDto>(query, null).Result;
         }
