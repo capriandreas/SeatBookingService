@@ -479,18 +479,18 @@ namespace SeatBookingService.Models.DAO
                     { "created_by", obj.created_by }
                 };
 
-            int route_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
+            int routes_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
             #endregion
 
             #region Insert into ms_stations_routes
             foreach (var item in obj.stationRoutes)
             {
                 query = @"insert into ms_stations_routes 
-                        (route_id, city, route_order, created_by, updated_by)
+                        (routes_id, city, route_order, created_by, updated_by)
                         values (@route_id, @city, @route_order, @created_by, @created_by)";
 
                 param = new Dictionary<string, object> {
-                    { "route_id", route_id },
+                    { "routes_id", routes_id },
                     { "city", item.city },
                     { "route_order", item.route_order },
                     { "created_by", obj.created_by }

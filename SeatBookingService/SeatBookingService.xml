@@ -60,6 +60,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllTrip">
+            <summary>
+            Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
             <summary>
             Digunakan untuk create user agen dan pengemudi oleh user admin
