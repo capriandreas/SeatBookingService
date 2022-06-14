@@ -34,7 +34,7 @@ namespace SeatBookingService.Controllers
         {
             _configuration = configuration;
             _transactionDao = transactionDao;
-        } 
+        }
 
         /// <summary>
         /// Digunakan untuk create user agen dan pengemudi oleh user admin
@@ -183,7 +183,7 @@ namespace SeatBookingService.Controllers
 
                 string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
 
-                StringBuilder sCommand = new StringBuilder("insert into tr_bus_assign_status (no_bus, status_bus_id, assign_date) values ");
+                StringBuilder sCommand = new StringBuilder("insert into tr_bus_assign_status (no_bus, status_bus_id, assign_date, station, description) values ");
 
                 using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
                 {
@@ -191,7 +191,7 @@ namespace SeatBookingService.Controllers
 
                     foreach(var item in bus)
                     {
-                        Rows.Add(string.Format("('{0}','{1}','{2}')", item.no_bus, item.status_bus_id, item.assign_date.ToString("yyyy-MM-dd HH:mm:ss")));
+                        Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}')", item.no_bus, item.status_bus_id, item.assign_date.ToString("yyyy-MM-dd"), item.station, item.description));
                     }
 
                     sCommand.Append(string.Join(",", Rows));
@@ -816,6 +816,34 @@ namespace SeatBookingService.Controllers
                 }
 
                 response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk create station routes
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("CreateStationRoutes")]
+        public async Task<IActionResult> CreateStationRoutes(TRStationRoutesDto obj)
+        {
+            var response = new APIResult<List<string>>();
+            var res = new BusinessLogicResult<List<string>>();
+
+            try
+            {
+                response.is_ok = _transactionDao.InsertNewStationRoutes(obj);
                 response.httpCode = HttpStatusCode.OK;
                 response.message = res.message;
             }

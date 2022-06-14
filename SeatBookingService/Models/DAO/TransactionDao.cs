@@ -460,5 +460,48 @@ namespace SeatBookingService.Models.DAO
 
             return result;
         }
+
+        public bool InsertNewStationRoutes(TRStationRoutesDto obj)
+        {
+            bool result = false;
+            string query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            #region Insert into ms_routes
+            query = @"insert into ms_routes 
+                        (kelas_bus_id, departure_hours, description, created_by, updated_by)
+                        values (@kelas_bus_id, @departure_hours, @description, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
+                    { "kelas_bus_id", obj.kelas_bus_id },
+                    { "departure_hours", obj.departure_hours },
+                    { "description", obj.description },
+                    { "created_by", obj.created_by }
+                };
+
+            int route_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
+            #endregion
+
+            #region Insert into ms_stations_routes
+            foreach (var item in obj.stationRoutes)
+            {
+                query = @"insert into ms_stations_routes 
+                        (route_id, city, route_order, created_by, updated_by)
+                        values (@route_id, @city, @route_order, @created_by, @created_by)";
+
+                param = new Dictionary<string, object> {
+                    { "route_id", route_id },
+                    { "city", item.city },
+                    { "route_order", item.route_order },
+                    { "created_by", obj.created_by }
+                };
+
+                result = _sQLHelper.queryInsert(query, param).Result > 0;
+            }
+
+            #endregion
+
+            return result;
+        }
     }
 }

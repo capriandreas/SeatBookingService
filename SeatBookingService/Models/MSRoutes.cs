@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SeatBookingService.Models
 {
-    public class TRBusAssignStatus
+    public class MSRoutes
     {
         public int id { get; set; }
-        public string no_bus { get; set; }
-        public int status_bus_id { get; set; }
-        public DateTime assign_date { get; set; }
-        public string station { get; set; }
+        public int kelas_bus_id { get; set; }
+        public string departure_hours { get; set; }
         public string description { get; set; }
         public string created_by { get; set; }
         public DateTime created_date { get; set; }
         public string updated_by { get; set; }
         public DateTime updated_date { get; set; }
+        public string kelas_bus { get; set; }
     }
 }

@@ -29,5 +29,6 @@ namespace SeatBookingService.Models.DAO
         public List<TRCancellationDto> GetListCancelSeat();
         public bool ApproveCancelSeat(TRCancellation obj);
         public bool RejectCancelSeat(TRCancellation obj);
+        public bool InsertNewStationRoutes(TRStationRoutesDto obj);
     }
 }
