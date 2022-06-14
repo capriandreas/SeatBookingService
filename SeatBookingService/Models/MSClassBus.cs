@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SeatBookingService.Models
 {
-    public class MSKelasBus
+    public class MSClassBus
     {
         public int id { get; set; }
         public string kelas_bus { get; set; }

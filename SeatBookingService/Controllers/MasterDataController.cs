@@ -140,5 +140,33 @@ namespace SeatBookingService.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetAllMasterBus")]
+        public async Task<IActionResult> GetAllMasterClassBus()
+        {
+            var response = new APIResult<List<MSBus>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _masterDataDao.GetAllMasterBus();
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
     }
 }

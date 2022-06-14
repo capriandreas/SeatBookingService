@@ -469,11 +469,11 @@ namespace SeatBookingService.Models.DAO
 
             #region Insert into ms_routes
             query = @"insert into ms_routes 
-                        (kelas_bus_id, departure_hours, description, created_by, updated_by)
-                        values (@kelas_bus_id, @departure_hours, @description, @created_by, @created_by)";
+                        (class_bus_id, departure_hours, description, created_by, updated_by)
+                        values (@class_bus_id, @departure_hours, @description, @created_by, @created_by)";
 
             param = new Dictionary<string, object> {
-                    { "kelas_bus_id", obj.kelas_bus_id },
+                    { "class_bus_id", obj.class_bus_id },
                     { "departure_hours", obj.departure_hours },
                     { "description", obj.description },
                     { "created_by", obj.created_by }
