@@ -60,6 +60,13 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<MSClassBusDto>(query, null).Result;
         }
 
+        public List<MSRolesDto> GetAllMasterRoles()
+        {
+            var query = @"select id, rolename from ms_roles";
+
+            return _sQLHelper.queryList<MSRolesDto>(query, null).Result;
+        }
+
         public List<MSStationsRoutes> GetAllOriginCity()
         {
             var query = @"select distinct city

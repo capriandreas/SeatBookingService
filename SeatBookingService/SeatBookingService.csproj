@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Seat Booking\SeatBookingService\SeatBookingService\SeatBookingService.xml</DocumentationFile>
+    <DocumentationFile>C:\Development\Bintut Seat Booking\Backend\SeatBookingService\SeatBookingService.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
