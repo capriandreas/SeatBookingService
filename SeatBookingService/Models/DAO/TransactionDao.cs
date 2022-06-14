@@ -487,7 +487,7 @@ namespace SeatBookingService.Models.DAO
             {
                 query = @"insert into ms_stations_routes 
                         (routes_id, city, route_order, created_by, updated_by)
-                        values (@route_id, @city, @route_order, @created_by, @created_by)";
+                        values (@routes_id, @city, @route_order, @created_by, @created_by)";
 
                 param = new Dictionary<string, object> {
                     { "routes_id", routes_id },
