@@ -53,6 +53,13 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<MSBus>(query, null).Result;
         }
 
+        public List<MSClassBusDto> GetAllMasterClassBus()
+        {
+            var query = @"select id, class_bus from ms_class_bus";
+
+            return _sQLHelper.queryList<MSClassBusDto>(query, null).Result;
+        }
+
         public List<MSStationsRoutes> GetAllOriginCity()
         {
             var query = @"select distinct city

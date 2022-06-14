@@ -148,15 +148,15 @@ namespace SeatBookingService.Controllers
         /// 
         /// </returns>
         [HttpGet]
-        [Route("GetAllMasterBus")]
+        [Route("GetAllMasterClassBus")]
         public async Task<IActionResult> GetAllMasterClassBus()
         {
-            var response = new APIResult<List<MSBus>>();
+            var response = new APIResult<List<MSClassBusDto>>();
 
             try
             {
                 response.is_ok = true;
-                response.data = _masterDataDao.GetAllMasterBus();
+                response.data = _masterDataDao.GetAllMasterClassBus();
                 response.data_records = response.data.Count;
                 response.httpCode = HttpStatusCode.OK;
             }

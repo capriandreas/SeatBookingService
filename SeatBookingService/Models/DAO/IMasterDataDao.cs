@@ -12,5 +12,6 @@ namespace SeatBookingService.Models.DAO
         public List<MSStationsRoutes> GetAllOriginCity();
         public List<MSStationsRoutes> GetAllDestinationCity(MSStationsRoutes obj);
         public List<MSUsersDto> GetAllListUsers();
+        public List<MSClassBusDto> GetAllMasterClassBus();
     }
 }
