@@ -14,6 +14,5 @@ namespace SeatBookingService.Models.DAO
         public List<MSUsersDto> GetAllListUsers();
         public List<MSClassBusDto> GetAllMasterClassBus();
         public List<MSRolesDto> GetAllMasterRoles();
-        public List<MSTripDto> GetAllTrip();
     }
 }

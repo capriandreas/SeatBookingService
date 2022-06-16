@@ -60,14 +60,6 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllTrip">
-            <summary>
-            Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
             <summary>
             Digunakan untuk create user agen dan pengemudi oleh user admin
@@ -231,6 +223,22 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateStationRoutes(SeatBookingService.Models.DTO.TRStationRoutesDto)">
             <summary>
             Digunakan untuk create station routes
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.CreateTripScheduleNonRegular(SeatBookingService.Models.TRTripSchedule)">
+            <summary>
+            Digunakan untuk create trip schedule (non regular) oleh admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetAllTrip(System.Nullable{System.DateTime})">
+            <summary>
+            Digunakan untuk menampilkan seluruh trip baik regular maupun non regular
             </summary>
             <returns>
             

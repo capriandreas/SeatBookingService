@@ -503,5 +503,71 @@ namespace SeatBookingService.Models.DAO
 
             return result;
         }
+
+        public bool CreateTripScheduleNonRegular(TRTripSchedule obj)
+        {
+            bool result = false;
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            #region Insert into tr_trip_schedule
+            query = @"insert into tr_trip_schedule 
+                        (class_bus_id, schedule_date, origin, origin_additional_information, destination, destination_additional_information, departure_hours, description, created_by, updated_by)
+                        values (@class_bus_id, @schedule_date, @origin, @origin_additional_information, @destination, @destination_additional_information, @departure_hours, @description, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
+                    { "class_bus_id", obj.class_bus_id },
+                    { "schedule_date", obj.schedule_date },
+                    { "origin", obj.origin },
+                    { "origin_additional_information", obj.origin_additional_information },
+                    { "destination", obj.destination },
+                    { "destination_additional_information", obj.destination_additional_information },
+                    { "departure_hours", obj.departure_hours },
+                    { "description", obj.description },
+                    { "created_by", obj.created_by }
+                };
+
+            result = _sQLHelper.queryInsert(query, param).Result > 0;
+            #endregion
+
+            return result;
+        }
+
+        public List<MSTripDto> GetAllTrip(DateTime? schedule_date)
+        {
+            var param = new Dictionary<string, object>();
+            var query = @"select * from
+                            (
+	                            select 
+                                    b.id as 'id_route',
+		                            GROUP_CONCAT(a.city separator ' - ') as `Route`,
+		                            b.departure_hours,
+		                            c.class_bus,
+                                    b.description,
+		                            'Regular' as trip_type
+	                            from ms_stations_routes a
+	                            left join ms_routes b on b.id = a.routes_id
+	                            left join ms_class_bus c on c.id = b.class_bus_id
+	                            where b.is_active = 1
+	                            group by b.id
+                            UNION
+	                            select 
+                                    a.id as 'id_route',
+		                            CONCAT_WS (' - ', a.origin, a.destination) as `Route`,
+		                            a.departure_hours,
+		                            a.class_bus_id,
+                                    a.description,
+		                            'Non Regular' as trip_type
+	                            from tr_trip_schedule a
+                                left join ms_class_bus b on b.id = a.class_bus_id "
+                                + (schedule_date != null && schedule_date.HasValue ? @"where a.schedule_date = @schedule_date" : string.Empty)
+                            + @") a ";
+
+            param = new Dictionary<string, object> {
+                    { "schedule_date", schedule_date }
+                };
+
+            return _sQLHelper.queryList<MSTripDto>(query, param).Result;
+        }
     }
 }
