@@ -1,4 +1,5 @@
 ﻿using SeatBookingService.Helper;
+using SeatBookingService.Library.Const;
 using SeatBookingService.Models.DTO;
 using System;
 using System.Collections.Generic;
@@ -78,17 +79,17 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.querySingle<LoginResultDto>(query, param).Result;
         }
 
-        public List<TRReservedSeatHeader2Dto> GetDataSeatValidation(int trip_schedule_id, string joinSeatId)
+        public List<TRReservedSeatHeader2Dto> GetDataSeatValidation(int trip_id, string joinSeatId)
         {
-            var query = @"select a.seat_id, a.reserved_seat_header_id, b.trip_schedule_id, d.seat_column, d.seat_row
+            var query = @"select a.seat_id, a.reserved_seat_header_id, b.trip_id, d.seat_column, d.seat_row
                             from tr_reserved_seat a
                             left join tr_reserved_seat_header b on b.id = a.reserved_seat_header_id
-                            left join tr_trip_schedule c on c.id = b.trip_schedule_id
+                            left join tr_trip c on c.id = b.trip_id
                             left join ms_seat d on d.id = a.seat_id
-                            where b.trip_schedule_id = @trip_schedule_id and a.seat_id in (" + joinSeatId + ")";
+                            where b.trip_id = @trip_id and a.seat_id in (" + joinSeatId + ")";
 
             var param = new Dictionary<string, object> {
-                { "trip_schedule_id", trip_schedule_id }
+                { "trip_id", trip_id }
             };
 
             return _sQLHelper.queryList<TRReservedSeatHeader2Dto>(query, param).Result;
@@ -165,32 +166,36 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<HistorySeatDetailDto>(query, param).Result;
         }
 
-        public List<MSSeatDto> GetListAllSeat(int trip_schedule_id)
+        public List<MSSeatDto> GetListAllSeat(TripDetailParamDto obj)
         {
-            var query = @"select 
-							b.id as reserved_seat_id,
-	                        c.id as seat_id,
-	                        c.no_bus,
-	                        c.seat_column,
-	                        c.seat_row,
-	                        a.users_id,
-	                        CASE WHEN a.id is null or f.status_seat_id = 1 then 'Available' else 'Booked' end as seat_status,
-	                        d.id as trip_schedule_id,
-							g.status_name,
-                            f.reason
-	                        from tr_reserved_seat_header a
-	                        left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
-	                        right join ms_seat c on c.id = b.seat_id
-	                        left join tr_trip_schedule d on d.id = a.trip_schedule_id
-	                        left join tr_bus_trip_schedule e on e.trip_schedule_id = d.id and e.no_bus = c.no_bus
-                            left join tr_cancellation f on f.reserved_seat_id = b.id
-                            left join ms_status_seat g on g.id = f.status_seat_id
-	                        where c.no_bus = (select no_bus from 
-						                        tr_bus_trip_schedule a
-						                        where a.trip_schedule_id = @trip_schedule_id)";
+            var query = @"select 	
+		                    b.id as reserved_seat_id,
+		                    c.id as seat_id,
+		                    c.class_bus_id,
+		                    c.seat_column,
+		                    c.seat_row,
+		                    a.users_id,
+		                    CASE WHEN a.id is null or f.status_seat_id = 1 then 'Available' else 'Booked' end as seat_status,
+		                    g.status_name,
+		                    f.reason,
+		                    a.trip_id,
+		                    h.trip_type_id
+		                    from tr_reserved_seat_header a
+		                    left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
+		                    right join ms_seat c on c.id = b.seat_id
+		                    left join tr_trip h on h.id = a.trip_id 
+		                    left join tr_cancellation f on f.reserved_seat_id = b.id
+		                    left join ms_status_seat g on g.id = f.status_seat_id
+		                    where c.class_bus_id = (select 
+									                    case 
+									                    when a.trip_type_id = 1 then (select class_bus_id from ms_routes where id = a.route_id) 
+									                    when a.trip_type_id = 2 then (select class_bus_id from tr_trip_schedule where id = a.route_id) 
+									                    end as class_bus_id
+								                    from tr_trip a
+								                    where route_id = @route_id)";
 
             var param = new Dictionary<string, object> {
-                { "trip_schedule_id", trip_schedule_id }
+                { "route_id", obj.route_id }
             };
 
             return _sQLHelper.queryList<MSSeatDto>(query, param).Result;
@@ -337,10 +342,10 @@ namespace SeatBookingService.Models.DAO
 
             foreach (var item in obj)
             {
-                query = @"insert into ms_seat (no_bus, seat_column, seat_row) values (@no_bus, @seat_column, @seat_row);";
+                query = @"insert into ms_seat (class_bus_id, seat_column, seat_row) values (@class_bus_id, @seat_column, @seat_row);";
 
                 param = new Dictionary<string, object> {
-                    { "no_bus", item.no_bus },
+                    { "class_bus_id", item.class_bus_id },
                     { "seat_column", item.seat_column },
                     { "seat_row", item.seat_row }
                 };
@@ -385,12 +390,12 @@ namespace SeatBookingService.Models.DAO
 
             #region Insert into tr_reserved_seat_header
             query = @"insert into tr_reserved_seat_header 
-                        (users_id, trip_schedule_id, price, additional_information, created_by, updated_by)
-                        values (@users_id, @trip_schedule_id, @price, @additional_information, @created_by, @created_by)";
+                        (users_id, trip_id, price, additional_information, created_by, updated_by)
+                        values (@users_id, @trip_id, @price, @additional_information, @created_by, @created_by)";
 
             param = new Dictionary<string, object> {
                     { "users_id", obj.users_id },
-                    { "trip_schedule_id", obj.trip_schedule_id },
+                    { "trip_id", obj.trip_id },
                     { "price", obj.price },
                     { "additional_information", obj.additional_information },
                     { "created_by", obj.users_id }
@@ -584,6 +589,48 @@ namespace SeatBookingService.Models.DAO
                 };
 
             return _sQLHelper.queryList<MSTripDto>(query, param).Result;
+        }
+
+        public TRTrip GetTrTrip(TripDetailParamDto obj)
+        {
+            var query = @"select 
+                            id, route_id, trip_type_id, schedule_date 
+                          from tr_trip
+                          where 
+                            route_id = @route_id
+                            and trip_type_id = @trip_type_id
+                            and schedule_date = @schedule_date";
+
+            var param = new Dictionary<string, object> {
+                { "route_id", obj.route_id },
+                { "trip_type_id", obj.trip_type_id },
+                { "schedule_date", obj.schedule_date }
+            };
+
+            return _sQLHelper.querySingle<TRTrip>(query, param).Result;
+        }
+
+        public bool CreateTrTrip(TripDetailParamDto obj)
+        {
+            bool result = false;
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            #region Insert into tr_reserved_seat_header
+            query = @"insert into tr_trip 
+                        (route_id, trip_type_id, schedule_date, created_by, updated_by)
+                        values (@route_id, @trip_type_id, @schedule_date, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
+                    { "route_id", obj.route_id },
+                    { "trip_type_id", obj.trip_type_id },
+                    { "schedule_date", obj.schedule_date },
+                    { "created_by", obj.created_by }
+                };
+
+            #endregion
+
+            return _sQLHelper.queryInsert(query, param).Result > 0;
         }
     }
 }

@@ -75,19 +75,19 @@ namespace SeatBookingService.BusinessLogic
 
             if (string.IsNullOrWhiteSpace(obj.users_id.ToString()))
             {
-                errMsg = "Users Id cannot be empty";
+                errMsg = "Users Id tidak boleh kosong";
             }
-            else if (string.IsNullOrWhiteSpace(obj.trip_schedule_id.ToString()))
+            else if (string.IsNullOrWhiteSpace(obj.trip_id.ToString()))
             {
-                errMsg = "Trip Schedule Id cannot be empty";
+                errMsg = "Trip Id tidak boleh kosong";
             }
             else if (obj.price <= 0 || string.IsNullOrWhiteSpace(obj.price.ToString()))
             {
-                errMsg = "Price cannot be empty";
+                errMsg = "Harga Tiket tidak boleh kosong";
             }
             else if (obj.seat_detail.Count <= 0)
             {
-                errMsg = "Seat Id cannot be empty";
+                errMsg = "Seat Id tidak boleh kosong";
             }
             else if(seat.Count > 0)
             {

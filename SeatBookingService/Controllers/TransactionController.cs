@@ -318,75 +318,6 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk menampilkan seluruh data seat berdasarkan trip schedule id
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpGet]
-        [Route("GetListAllSeat")]
-        public async Task<IActionResult> GetListAllSeat([FromQuery] int trip_schedule_id)
-        {
-            var response = new APIResult<List<MSSeatDto>>();
-            BusinessLogicResult res = new BusinessLogicResult();
-
-            try
-            {
-                response.data = _transactionDao.GetListAllSeat(trip_schedule_id);
-                response.data_records = response.data.Count;
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Digunakan untuk submit seat booking
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpPost]
-        [Route("SubmitSeatBooking")]
-        public async Task<IActionResult> SubmitSeatBooking(TRReservedSeatHeaderDto obj)
-        {
-            var response = new APIResult<List<TRReservedSeatHeaderDto>>();
-            BusinessLogicResult res = new BusinessLogicResult();
-
-            try
-            {
-                string joinSeatId = string.Join(",", obj.seat_detail.Select(x => x.seat_id));
-                List<TRReservedSeatHeader2Dto> tRReservedSeatHeader2Dtos = _transactionDao.GetDataSeatValidation(obj.trip_schedule_id, joinSeatId);
-                res = TransactionLogic.SubmitSeatBooking(obj, tRReservedSeatHeader2Dtos);
-
-                if (res.result)
-                {
-                    response.is_ok = _transactionDao.SubmitSeatBooking(obj);
-                }
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Digunakan untuk menampilkan seluruh trip yang sudah di booking oleh agent
         /// </summary>
         /// <returns>
@@ -928,16 +859,67 @@ namespace SeatBookingService.Controllers
         /// </returns>
         [HttpGet]
         [Route("GetTripSeatDetail")]
-        public async Task<IActionResult> GetTripSeatDetail(TripDetailParamDto obj)
+        public async Task<IActionResult> GetTripSeatDetail([FromQuery] TripDetailParamDto obj)
         {
-            var response = new APIResult<List<MSTripDto>>();
-
+            var response = new APIResult<BusSeatDetails>();
+            BusSeatDetails busSeat = new BusSeatDetails();
             try
             {
                 response.is_ok = true;
-                response.data = _transactionDao.GetAllTrip(schedule_date);
-                response.data_records = response.data.Count;
+
+                #region check if data exists
+                TRTrip trTrip = _transactionDao.GetTrTrip(obj);
+                if (trTrip == null)
+                {
+                    bool isSuccessInsert = _transactionDao.CreateTrTrip(obj);
+                }
+                #endregion
+
+                TRTrip getTrTrip = _transactionDao.GetTrTrip(obj);
+                busSeat.trip_id = getTrTrip.id;
+                busSeat.SeatsDetail = _transactionDao.GetListAllSeat(obj);
+
+                response.data = busSeat;
+                response.data_records = busSeat.SeatsDetail.Count;
                 response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk submit seat booking
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("SubmitSeatBooking")]
+        public async Task<IActionResult> SubmitSeatBooking(TRReservedSeatHeaderDto obj)
+        {
+            var response = new APIResult<List<TRReservedSeatHeaderDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                string joinSeatId = string.Join(",", obj.seat_detail.Select(x => x.seat_id));
+                List<TRReservedSeatHeader2Dto> tRReservedSeatHeader2Dtos = _transactionDao.GetDataSeatValidation(obj.trip_id, joinSeatId);
+                res = TransactionLogic.SubmitSeatBooking(obj, tRReservedSeatHeader2Dtos);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.SubmitSeatBooking(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+
             }
             catch (Exception ex)
             {

@@ -76,7 +76,7 @@ namespace SeatBookingService.BusinessLogic
                 string[] words = item.Split(',');
                 foreach (string word in words)
                 {
-                    seat.no_bus = obj.no_bus;
+                    seat.class_bus_id = obj.class_bus_id;
                     if (counter == 1)
                         seat.seat_row = word.ToString();
                     else if (counter == 2)

@@ -12,13 +12,13 @@ namespace SeatBookingService.Models.DAO
         public bool SubmitTripSchedule(TRTripScheduleDto obj);
         public List<TRTripScheduleDto> GetListTripSchedule(TRTripSchedule obj);
         public bool InsertMasterSeat(List<MSSeat> obj);
-        public List<MSSeatDto> GetListAllSeat(int trip_schedule_id);
+        public List<MSSeatDto> GetListAllSeat(TripDetailParamDto obj);
         public bool SubmitSeatBooking(TRReservedSeatHeaderDto obj);
         public List<TRReservedSeatHeaderBookedDto> GetListBookedTrip(int users_id);
         public List<MSSeatDetailDto> GetSeatDetail(int reserved_seat_header_id);
         public TicketDto GetTicketDataHeader(int reserved_seat_header_id);
         public LoginResultDto GetDataLogin(MSUsers obj);
-        public List<TRReservedSeatHeader2Dto> GetDataSeatValidation(int trip_schedule_id, string joinSeatId);
+        public List<TRReservedSeatHeader2Dto> GetDataSeatValidation(int trip_id, string joinSeatId);
         public bool SubmitExpedition(TRExpedition obj);
         public List<TRExpeditionDto> GetExpedition(TRExpedition obj);
         public List<HistoryHeaderDto> GetHistoryHeader(int users_id);
@@ -32,5 +32,7 @@ namespace SeatBookingService.Models.DAO
         public bool InsertNewStationRoutes(TRStationRoutesDto obj);
         public bool CreateTripScheduleNonRegular(TRTripSchedule obj);
         public List<MSTripDto> GetAllTrip(DateTime? schedule_date);
+        public TRTrip GetTrTrip(TripDetailParamDto obj);
+        public bool CreateTrTrip(TripDetailParamDto obj);
     }
 }

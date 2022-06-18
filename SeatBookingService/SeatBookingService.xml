@@ -100,22 +100,6 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.GetListAllSeat(System.Int32)">
-            <summary>
-            Digunakan untuk menampilkan seluruh data seat berdasarkan trip schedule id
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitSeatBooking(SeatBookingService.Models.DTO.TRReservedSeatHeaderDto)">
-            <summary>
-            Digunakan untuk submit seat booking
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GetListBookedTrip(System.Int32)">
             <summary>
             Digunakan untuk menampilkan seluruh trip yang sudah di booking oleh agent
@@ -239,6 +223,22 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.GetAllTrip(System.Nullable{System.DateTime})">
             <summary>
             Digunakan untuk menampilkan seluruh trip baik regular maupun non regular
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetTripSeatDetail(SeatBookingService.Models.DTO.TripDetailParamDto)">
+            <summary>
+            Digunakan untuk menampilkan seluruh trip baik regular maupun non regular
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitSeatBooking(SeatBookingService.Models.DTO.TRReservedSeatHeaderDto)">
+            <summary>
+            Digunakan untuk submit seat booking
             </summary>
             <returns>
             
