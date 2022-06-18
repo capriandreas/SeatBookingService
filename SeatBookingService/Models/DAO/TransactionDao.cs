@@ -536,15 +536,22 @@ namespace SeatBookingService.Models.DAO
         public List<MSTripDto> GetAllTrip(DateTime? schedule_date)
         {
             var param = new Dictionary<string, object>();
-            var query = @"select * from
+            var query = @"select 
+                            a.id_route,
+                            a.Route,
+                            a.departure_hours,
+                            a.class_bus,
+                            a.description,
+                            b.*
+                          from
                             (
 	                            select 
                                     b.id as 'id_route',
 		                            GROUP_CONCAT(a.city separator ' - ') as `Route`,
 		                            b.departure_hours,
 		                            c.class_bus,
-                                    b.description,
-		                            'Regular' as trip_type
+		                            b.description,
+		                            1 as trip_type_id
 	                            from ms_stations_routes a
 	                            left join ms_routes b on b.id = a.routes_id
 	                            left join ms_class_bus c on c.id = b.class_bus_id
@@ -555,13 +562,22 @@ namespace SeatBookingService.Models.DAO
                                     a.id as 'id_route',
 		                            CONCAT_WS (' - ', a.origin, a.destination) as `Route`,
 		                            a.departure_hours,
-		                            a.class_bus_id,
-                                    a.description,
-		                            'Non Regular' as trip_type
+		                            b.class_bus,
+		                            a.description,
+		                            2 as trip_type_id
 	                            from tr_trip_schedule a
                                 left join ms_class_bus b on b.id = a.class_bus_id "
                                 + (schedule_date != null && schedule_date.HasValue ? @"where a.schedule_date = @schedule_date" : string.Empty)
-                            + @") a ";
+                            + @") a 
+                            left join (select result.*
+	                                    from ms_settings a,
+                                         json_table(a.data,
+                                                    '$[*]' columns (
+                                                        trip_type_id int path '$.trip_type_id',
+                                                        trip_type_name varchar(255) path '$.trip_type_name'
+                                                        )
+                                             ) result
+	                                    where a.key = 'trip_type') b on b.trip_type_id = a.trip_type_id";
 
             param = new Dictionary<string, object> {
                     { "schedule_date", schedule_date }
