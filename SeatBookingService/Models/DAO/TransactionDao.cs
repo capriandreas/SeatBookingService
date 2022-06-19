@@ -166,7 +166,7 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<HistorySeatDetailDto>(query, param).Result;
         }
 
-        public List<MSSeatDto> GetListAllSeat(TripDetailParamDto obj)
+        public List<MSSeatDto> GetListAllSeat(int trip_id)
         {
             var query = @"select 	
 		                    b.id as reserved_seat_id,
@@ -192,10 +192,10 @@ namespace SeatBookingService.Models.DAO
 									                    when a.trip_type_id = 2 then (select class_bus_id from tr_trip_schedule where id = a.route_id) 
 									                    end as class_bus_id
 								                    from tr_trip a
-								                    where route_id = @route_id)";
+								                    where a.id = @trip_id) order by seat_status desc";
 
             var param = new Dictionary<string, object> {
-                { "route_id", obj.route_id }
+                { "trip_id", trip_id }
             };
 
             return _sQLHelper.queryList<MSSeatDto>(query, param).Result;

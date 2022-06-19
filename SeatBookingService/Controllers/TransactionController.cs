@@ -580,7 +580,7 @@ namespace SeatBookingService.Controllers
 
                 TRTrip getTrTrip = _transactionDao.GetTrTrip(obj);
                 busSeat.trip_id = getTrTrip.id;
-                busSeat.SeatsDetail = _transactionDao.GetListAllSeat(obj);
+                busSeat.SeatsDetail = _transactionDao.GetListAllSeat(getTrTrip.id);
 
                 response.data = busSeat;
                 response.data_records = busSeat.SeatsDetail.Count;
