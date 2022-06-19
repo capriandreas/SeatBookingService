@@ -151,73 +151,6 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk assign bus status per tanggal
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpPost]
-        [Route("AssignBusStatus")]
-        public async Task<IActionResult> AssignBusStatus(List<TRBusAssignStatus> bus)
-        {
-            var response = new APIResult<DataTable>();
-            string errMsg = string.Empty;
-            string query = string.Empty;
-
-            try
-            {
-                #region Validation
-                if(bus.Count <= 0)
-                {
-                    errMsg = "No Data, Please Check Your Request!";
-                }
-
-                if (!string.IsNullOrEmpty(errMsg))
-                {
-                    response.httpCode = HttpStatusCode.OK;
-                    response.is_ok = false;
-                    response.message = errMsg;
-                    return Ok(response);
-                }
-                #endregion
-
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-
-                StringBuilder sCommand = new StringBuilder("insert into tr_bus_assign_status (no_bus, status_bus_id, assign_date, station, description) values ");
-
-                using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
-                {
-                    List<string> Rows = new List<string>();
-
-                    foreach(var item in bus)
-                    {
-                        Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}')", item.no_bus, item.status_bus_id, item.assign_date.ToString("yyyy-MM-dd"), item.station, item.description));
-                    }
-
-                    sCommand.Append(string.Join(",", Rows));
-                    sCommand.Append(";");
-                    mycon.Open();
-
-                    using (MySqlCommand myCommand = new MySqlCommand(sCommand.ToString(), mycon))
-                    {
-                        myCommand.CommandType = CommandType.Text;
-                        myCommand.ExecuteNonQuery();
-                    }
-                }
-
-                response.httpCode = HttpStatusCode.OK;
-                response.is_ok = true;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
         /// </summary>
         /// <returns>
@@ -914,6 +847,42 @@ namespace SeatBookingService.Controllers
                 if (res.result)
                 {
                     response.is_ok = _transactionDao.SubmitSeatBooking(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk assign bus status per tanggal
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("AssignBusStatus")]
+        public async Task<IActionResult> AssignBusStatus(List<TRBusAssignStatus> obj)
+        {
+            var response = new APIResult<List<TRTripSchedule>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.AssignBusStatus(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.AssignBusStatus(obj);
                 }
 
                 response.is_ok = true;

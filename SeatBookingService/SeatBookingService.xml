@@ -68,14 +68,6 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.AssignBusStatus(System.Collections.Generic.List{SeatBookingService.Models.TRBusAssignStatus})">
-            <summary>
-            Digunakan untuk assign bus status per tanggal
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GetListAssignedBus(SeatBookingService.Models.TRBusAssignStatus)">
             <summary>
             Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
@@ -239,6 +231,14 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.SubmitSeatBooking(SeatBookingService.Models.DTO.TRReservedSeatHeaderDto)">
             <summary>
             Digunakan untuk submit seat booking
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.AssignBusStatus(System.Collections.Generic.List{SeatBookingService.Models.TRBusAssignStatus})">
+            <summary>
+            Digunakan untuk assign bus status per tanggal
             </summary>
             <returns>
             

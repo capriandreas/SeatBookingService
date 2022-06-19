@@ -55,7 +55,7 @@ namespace SeatBookingService.BusinessLogic
 
             string errMsg = string.Empty;
 
-            if(obj.schedule_date == DateTime.MinValue || obj.schedule_date == null)
+            if (obj.schedule_date == DateTime.MinValue || obj.schedule_date == null)
             {
                 errMsg = "Schedule Date cannot be empty";
             }
@@ -89,7 +89,7 @@ namespace SeatBookingService.BusinessLogic
             {
                 errMsg = "Seat Id tidak boleh kosong";
             }
-            else if(seat.Count > 0)
+            else if (seat.Count > 0)
             {
                 foreach (var item in seat)
                 {
@@ -235,6 +235,20 @@ namespace SeatBookingService.BusinessLogic
 
             res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
             res.message = errMsg;
+
+            return res;
+        }
+
+        public static BusinessLogicResult AssignBusStatus(List<TRBusAssignStatus> obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if(obj.Count <= 0)
+            {
+                errMsg = "Tidak ada bus yang dipilih, harap cek kembali data anda";
+            }
 
             return res;
         }

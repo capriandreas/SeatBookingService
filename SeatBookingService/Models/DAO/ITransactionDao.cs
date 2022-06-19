@@ -34,5 +34,6 @@ namespace SeatBookingService.Models.DAO
         public List<MSTripDto> GetAllTrip(DateTime? schedule_date);
         public TRTrip GetTrTrip(TripDetailParamDto obj);
         public bool CreateTrTrip(TripDetailParamDto obj);
+        public bool AssignBusStatus(List<TRBusAssignStatus> obj);
     }
 }

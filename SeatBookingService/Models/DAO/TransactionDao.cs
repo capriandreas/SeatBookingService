@@ -632,5 +632,29 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryInsert(query, param).Result > 0;
         }
+
+        public bool AssignBusStatus(List<TRBusAssignStatus> obj)
+        {
+            bool result = false;
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            foreach (var item in obj)
+            {
+                query = @"insert into tr_bus_assign_status (no_bus, status_bus_id, assign_date, station, description) values (@no_bus, @status_bus_id, @assign_date, @station, @description);";
+
+                param = new Dictionary<string, object> {
+                    { "no_bus", item.no_bus },
+                    { "status_bus_id", item.status_bus_id },
+                    { "assign_date", item.assign_date },
+                    { "station", item.station },
+                    { "description", item.description }
+                };
+
+                result = _sQLHelper.queryInsert(query, param).Result > 0;
+            }
+
+            return result;
+        }
     }
 }
