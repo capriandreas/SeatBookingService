@@ -139,11 +139,35 @@ namespace SeatBookingService.Models.DAO
 
         public List<HistoryHeaderDto> GetHistoryHeader(int users_id)
         {
-            var query = @"select distinct b.trip_schedule_id, a.schedule_date, a.origin, a.destination, b.users_id, c.no_bus
-                            from tr_trip_schedule a
-                            left join tr_reserved_seat_header b on a.id = b.trip_schedule_id
-                            left join tr_bus_trip_schedule c on c.trip_schedule_id = a.id
-                            where b.users_id = @users_id";
+            var query = @"select 
+								a.trip_id,
+                                b.schedule_date,
+                                a.users_id,
+								a.price,
+                                (select count(id) from tr_reserved_seat where reserved_seat_header_id = a.id) as total_tickets,
+                                (select count(id) * a.price from tr_reserved_seat where reserved_seat_header_id = a.id) as total_price,
+                                a.additional_information,
+                                b.route_id,
+                                b.trip_type_id,
+                                 case 
+								when b.trip_type_id = 1 then 
+                                (
+									select GROUP_CONCAT(a.city separator ' - ') as `Route` 
+									from ms_stations_routes a
+									left join ms_routes b on b.id = a.routes_id
+                                    where b.is_active = 1 and b.id = b.route_id
+                                    group by b.id
+								) 
+								when b.trip_type_id = 2 then 
+                                (
+									select CONCAT_WS (' - ', a.origin, a.destination) as `Route`
+									from tr_trip_schedule a
+									where a.id = b.route_id
+								) 
+							end as route
+							from tr_reserved_seat_header a
+                            left join tr_trip b on b.id = a.trip_id
+                            where a.users_id = @users_id";
 
             var param = new Dictionary<string, object> {
                 { "users_id", users_id }

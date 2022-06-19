@@ -339,37 +339,6 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk get history header
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpGet]
-        [Route("GetHistoryHeader")]
-        public async Task<IActionResult> GetHistoryHeader([FromQuery] int users_id)
-        {
-            var response = new APIResult<List<HistoryHeaderDto>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                response.data = _transactionDao.GetHistoryHeader(users_id);
-                response.data_records = response.data.Count;
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Digunakan untuk get history detail
         /// </summary>
         /// <returns>
@@ -915,6 +884,37 @@ namespace SeatBookingService.Controllers
             try
             {
                 response.data = _transactionDao.GetListHistoryCancelSeat();
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk get history header
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetHistoryHeader")]
+        public async Task<IActionResult> GetHistoryHeader([FromQuery] int users_id)
+        {
+            var response = new APIResult<List<HistoryHeaderDto>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetHistoryHeader(users_id);
                 response.data_records = response.data.Count;
 
                 response.is_ok = true;
