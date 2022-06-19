@@ -68,14 +68,6 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.GetListAssignedBus(SeatBookingService.Models.TRBusAssignStatus)">
-            <summary>
-            Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.SubmitTripSchedule(SeatBookingService.Models.DTO.TRTripScheduleDto)">
             <summary>
             Digunakan untuk submit trip schedule oleh admin
@@ -116,22 +108,6 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitExpedisi(SeatBookingService.Models.TRExpedition)">
-            <summary>
-            Digunakan untuk submit expedisi barang oleh agent
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.GetExpedition(SeatBookingService.Models.TRExpedition)">
-            <summary>
-            Digunakan untuk submit expedisi barang oleh agent
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GetHistoryHeader(System.Int32)">
             <summary>
             Digunakan untuk get history header
@@ -159,38 +135,6 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.GetHistoryExpeditionDetail(System.Int32,System.Int32)">
             <summary>
             Digunakan untuk get history expedition detail
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.CancelSeat(SeatBookingService.Models.TRCancellation)">
-            <summary>
-            Digunakan untuk cancel seat oleh agent
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.GetListCancelSeat">
-            <summary>
-            Digunakan oleh admin untuk get list cancel yang dilakukan agent
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.ApproveCancelSeat(SeatBookingService.Models.TRCancellation)">
-            <summary>
-            Digunakan untuk action approve cancel seat oleh admin
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.RejectCancelSeat(SeatBookingService.Models.TRCancellation)">
-            <summary>
-            Digunakan untuk action reject cancel seat oleh admin
             </summary>
             <returns>
             
@@ -239,6 +183,70 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.AssignBusStatus(System.Collections.Generic.List{SeatBookingService.Models.TRBusAssignStatus})">
             <summary>
             Digunakan untuk assign bus status per tanggal
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListAssignedBus(SeatBookingService.Models.TRBusAssignStatus)">
+            <summary>
+            Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.SubmitExpedisi(SeatBookingService.Models.TRExpedition)">
+            <summary>
+            Digunakan untuk submit expedisi barang oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetExpedition(SeatBookingService.Models.TRExpedition)">
+            <summary>
+            Digunakan untuk submit expedisi barang oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.CancelSeat(SeatBookingService.Models.TRCancellation)">
+            <summary>
+            Digunakan untuk cancel seat oleh agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListCancelSeat">
+            <summary>
+            Digunakan oleh admin untuk get list cancel yang dilakukan agent
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.ApproveCancelSeat(SeatBookingService.Models.TRCancellation)">
+            <summary>
+            Digunakan untuk action approve cancel seat oleh admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.RejectCancelSeat(SeatBookingService.Models.TRCancellation)">
+            <summary>
+            Digunakan untuk action reject cancel seat oleh admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetListHistoryCancelSeat">
+            <summary>
+            Digunakan oleh admin untuk get list cancel yang dilakukan agent
             </summary>
             <returns>
             

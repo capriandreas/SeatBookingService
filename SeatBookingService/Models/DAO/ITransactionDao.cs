@@ -35,5 +35,6 @@ namespace SeatBookingService.Models.DAO
         public TRTrip GetTrTrip(TripDetailParamDto obj);
         public bool CreateTrTrip(TripDetailParamDto obj);
         public bool AssignBusStatus(List<TRBusAssignStatus> obj);
+        public List<TRCancellationDto> GetListHistoryCancelSeat();
     }
 }

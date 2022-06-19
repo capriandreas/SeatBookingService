@@ -11,12 +11,13 @@ namespace SeatBookingService.Models.DTO
         public int action_id { get; set; }
         public string action_name { get; set; }
         public string reason { get; set; }
-        public string no_bus { get; set; }
-        public string origin { get; set; }
-        public string destination { get; set; }
+        public int trip_id { get; set; }
+        public int route_id { get; set; }
+        public int trip_type_id { get; set; }
         public DateTime schedule_date { get; set; }
         public string seat_column { get; set; }
         public string seat_row { get; set; }
         public string nickname { get; set; }
+        public string route { get; set; }
     }
 }

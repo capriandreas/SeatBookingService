@@ -151,34 +151,6 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpGet]
-        [Route("GetListAssignedBus")]
-        public async Task<IActionResult> GetListAssignedBus([FromQuery] TRBusAssignStatus obj)
-        {
-            var response = new APIResult<List<TRBusAssignStatusDto>>();
-
-            try
-            {
-                response.is_ok = true;
-                response.data = _transactionDao.GetListAssignedBus(obj);
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Digunakan untuk submit trip schedule oleh admin
         /// </summary>
         /// <returns>
@@ -367,72 +339,6 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk submit expedisi barang oleh agent
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpPost]
-        [Route("SubmitExpedisi")]
-        public async Task<IActionResult> SubmitExpedisi(TRExpedition obj)
-        {
-            var response = new APIResult<List<TRExpedition>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                res = TransactionLogic.SubmitExpedisi(obj);
-
-                if (res.result)
-                {
-                    response.is_ok = _transactionDao.SubmitExpedition(obj);
-                }
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Digunakan untuk submit expedisi barang oleh agent
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpGet]
-        [Route("GetExpedition")]
-        public async Task<IActionResult> GetExpedition([FromQuery] TRExpedition obj)
-        {
-            var response = new APIResult<List<TRExpeditionDto>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                response.data = _transactionDao.GetExpedition(obj);
-                response.data_records = response.data.Count;
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Digunakan untuk get history header
         /// </summary>
         /// <returns>
@@ -542,142 +448,6 @@ namespace SeatBookingService.Controllers
             {
                 response.data = _transactionDao.GetHistoryExpeditionDetail(trip_schedule_id, users_id);
                 response.data_records = response.data.Count;
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Digunakan untuk cancel seat oleh agent
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpPost]
-        [Route("CancelSeat")]
-        public async Task<IActionResult> CancelSeat(TRCancellation obj)
-        {
-            var response = new APIResult<List<TRCancellation>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                res = TransactionLogic.CancelSeat(obj);
-
-                if (res.result)
-                {
-                    response.is_ok = _transactionDao.CancelSeat(obj);
-                }
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Digunakan oleh admin untuk get list cancel yang dilakukan agent
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpGet]
-        [Route("GetListCancelSeat")]
-        public async Task<IActionResult> GetListCancelSeat()
-        {
-            var response = new APIResult<List<TRCancellationDto>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                response.data = _transactionDao.GetListCancelSeat();
-                response.data_records = response.data.Count;
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Digunakan untuk action approve cancel seat oleh admin
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpPost]
-        [Route("ApproveCancelSeat")]
-        public async Task<IActionResult> ApproveCancelSeat([FromBody] TRCancellation obj)
-        {
-            var response = new APIResult<List<TRCancellation>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                res = TransactionLogic.ApproveCancelSeat(obj);
-
-                if (res.result)
-                {
-                    response.is_ok = _transactionDao.ApproveCancelSeat(obj);
-                }
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Digunakan untuk action reject cancel seat oleh admin
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpPost]
-        [Route("RejectCancelSeat")]
-        public async Task<IActionResult> RejectCancelSeat([FromBody] TRCancellation obj)
-        {
-            var response = new APIResult<List<TRCancellation>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                res = TransactionLogic.RejectCancelSeat(obj);
-
-                if (res.result)
-                {
-                    response.is_ok = _transactionDao.RejectCancelSeat(obj);
-                }
 
                 response.is_ok = true;
                 response.httpCode = HttpStatusCode.OK;
@@ -889,6 +659,267 @@ namespace SeatBookingService.Controllers
                 response.httpCode = HttpStatusCode.OK;
                 response.message = res.message;
 
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh bus yang sudah di assign berdasarkan tanggal assign
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetListAssignedBus")]
+        public async Task<IActionResult> GetListAssignedBus([FromQuery] TRBusAssignStatus obj)
+        {
+            var response = new APIResult<List<TRBusAssignStatusDto>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _transactionDao.GetListAssignedBus(obj);
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk submit expedisi barang oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("SubmitExpedisi")]
+        public async Task<IActionResult> SubmitExpedisi(TRExpedition obj)
+        {
+            var response = new APIResult<List<TRExpedition>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.SubmitExpedisi(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.SubmitExpedition(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk submit expedisi barang oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetExpedition")]
+        public async Task<IActionResult> GetExpedition([FromQuery] TRExpedition obj)
+        {
+            var response = new APIResult<List<TRExpeditionDto>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetExpedition(obj);
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk cancel seat oleh agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("CancelSeat")]
+        public async Task<IActionResult> CancelSeat(TRCancellation obj)
+        {
+            var response = new APIResult<List<TRCancellation>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.CancelSeat(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.CancelSeat(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan oleh admin untuk get list cancel yang dilakukan agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetListCancelSeat")]
+        public async Task<IActionResult> GetListCancelSeat()
+        {
+            var response = new APIResult<List<TRCancellationDto>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetListCancelSeat();
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk action approve cancel seat oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("ApproveCancelSeat")]
+        public async Task<IActionResult> ApproveCancelSeat([FromBody] TRCancellation obj)
+        {
+            var response = new APIResult<List<TRCancellation>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.ApproveCancelSeat(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.ApproveCancelSeat(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk action reject cancel seat oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("RejectCancelSeat")]
+        public async Task<IActionResult> RejectCancelSeat([FromBody] TRCancellation obj)
+        {
+            var response = new APIResult<List<TRCancellation>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.RejectCancelSeat(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.RejectCancelSeat(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan oleh admin untuk get list cancel yang dilakukan agent
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetListHistoryCancelSeat")]
+        public async Task<IActionResult> GetListHistoryCancelSeat()
+        {
+            var response = new APIResult<List<TRCancellationDto>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetListHistoryCancelSeat();
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
             }
             catch (Exception ex)
             {

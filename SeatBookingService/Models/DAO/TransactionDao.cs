@@ -97,13 +97,13 @@ namespace SeatBookingService.Models.DAO
 
         public List<TRExpeditionDto> GetExpedition(TRExpedition obj)
         {
-            var query = @"select a.users_id, a.trip_schedule_id, a.price, a.goods_type, a.volume, a.additional_information
+            var query = @"select a.users_id, a.trip_id, a.price, a.goods_type, a.volume, a.additional_information
                             from tr_expedition a
-                            where a.users_id = @users_id and a.trip_schedule_id = @trip_schedule_id";
+                            where a.users_id = @users_id and a.trip_id = @trip_id";
 
             var param = new Dictionary<string, object> {
                 { "users_id", obj.users_id },
-                { "trip_schedule_id", obj.trip_schedule_id },
+                { "trip_id", obj.trip_id },
             };
 
             return _sQLHelper.queryList<TRExpeditionDto>(query, param).Result;
@@ -203,7 +203,7 @@ namespace SeatBookingService.Models.DAO
 
         public List<TRBusAssignStatusDto> GetListAssignedBus(TRBusAssignStatus obj)
         {
-            var query = @"select h.no_bus, c.no_polisi, c.jumlah_seat, c.kelas_id, h.status_bus_id, b.status_bus, h.assign_date, d.kelas_bus
+            var query = @"select h.no_bus, c.no_polisi, c.jumlah_seat, c.class_bus_id, h.status_bus_id, b.status_bus, h.assign_date, d.class_bus
                             from tr_bus_assign_status h
                             inner join (select a1.no_bus, a1.created_date
                             from tr_bus_assign_status a1
@@ -212,10 +212,11 @@ namespace SeatBookingService.Models.DAO
                             on h.no_bus = h2.no_bus and h.created_date = h2.created_date
                             left join ms_status_bus b on b.id = h.status_bus_id
                             left join ms_bus c on c.no_bus = h.no_bus
-                            left join ms_kelas_bus d on d.id = c.kelas_id
-                            where h.status_bus_id = 2 and h.assign_date = @assign_date";
+                            left join ms_class_bus d on d.id = c.class_bus_id
+                            where h.status_bus_id = @status_bus_id and h.assign_date = @assign_date";
 
             var param = new Dictionary<string, object> {
+                { "status_bus_id", obj.status_bus_id },
                 { "assign_date", obj.assign_date }
             };
 
@@ -256,22 +257,44 @@ namespace SeatBookingService.Models.DAO
 			                a.action_id, 
 			                c.action_name, 
 			                a.reason,
-                            h.no_bus,
-                            f.origin,
-                            f.destination,
+                            e.trip_id,
+                            f.route_id,
+                            f.trip_type_id,
+                            -- h.no_bus,
+                            -- f.origin,
+                            -- f.destination,
                             f.schedule_date,
                             g.seat_column,
                             g.seat_row,
-                            i.nickname
+                            i.nickname,
+                            case 
+								when f.trip_type_id = 1 then 
+                                (
+									select GROUP_CONCAT(a.city separator ' - ') as `Route` 
+									from ms_stations_routes a
+									left join ms_routes b on b.id = a.routes_id
+                                    where b.is_active = 1 and b.id = f.route_id
+                                    group by b.id
+								) 
+								when f.trip_type_id = 2 then 
+                                (
+									select CONCAT_WS (' - ', a.origin, a.destination) as `Route`
+									from tr_trip_schedule a
+									where a.id = f.route_id
+								) 
+							end as route
 		                from tr_cancellation a 
 		                left join ms_status_seat b on b.id = a.status_seat_id
 		                left join ms_action c on c.id = a.action_id
 		                left join tr_reserved_seat d on d.id = a.reserved_seat_id
 		                left join tr_reserved_seat_header e on e.id = d.reserved_seat_header_id
-		                left join tr_trip_schedule f on f.id = e.trip_schedule_id
+                        left join tr_trip f on f.id = e.trip_id
+		                -- left join tr_trip_schedule f on f.id = e.trip_schedule_id
                         left join ms_seat g on g.id = d.seat_id
-                        left join tr_bus_trip_schedule h on h.trip_schedule_id = f.id
-                        left join ms_users i on i.id = d.created_by
+                        -- left join tr_bus_trip_schedule h on h.trip_schedule_id = f.id
+                        left join ms_users i on i.id = f.route_id
+                        left join ms_routes j on j.id = f.route_id
+                        left join tr_trip_schedule k on k.id = f.route_id
 		                where a.action_id is null";
 
             return _sQLHelper.queryList<TRCancellationDto>(query, null).Result;
@@ -358,18 +381,17 @@ namespace SeatBookingService.Models.DAO
 
         public bool SubmitExpedition(TRExpedition obj)
         {
-            bool result = false;
             var query = string.Empty;
             var param = new Dictionary<string, object>();
 
             #region Insert into tr_reserved_seat_header
             query = @"insert into tr_expedition 
-                        (users_id, trip_schedule_id, price, goods_type, volume, additional_information, created_by, updated_by)
-                        values (@users_id, @trip_schedule_id, @price, @goods_type, @volume, @additional_information, @created_by, @created_by)";
+                        (users_id, trip_id, price, goods_type, volume, additional_information, created_by, updated_by)
+                        values (@users_id, @trip_id, @price, @goods_type, @volume, @additional_information, @created_by, @created_by)";
 
             param = new Dictionary<string, object> {
                     { "users_id", obj.users_id },
-                    { "trip_schedule_id", obj.trip_schedule_id },
+                    { "trip_id", obj.trip_id },
                     { "price", obj.price },
                     { "goods_type", obj.goods_type },
                     { "volume", obj.volume },
@@ -655,6 +677,59 @@ namespace SeatBookingService.Models.DAO
             }
 
             return result;
+        }
+
+        public List<TRCancellationDto> GetListHistoryCancelSeat()
+        {
+            var query = @"select 
+			                a.id, 
+			                a.reserved_seat_id, 
+			                a.status_seat_id, 
+			                b.status_name, 
+			                a.action_id, 
+			                c.action_name, 
+			                a.reason,
+                            e.trip_id,
+                            f.route_id,
+                            f.trip_type_id,
+                            -- h.no_bus,
+                            -- f.origin,
+                            -- f.destination,
+                            f.schedule_date,
+                            g.seat_column,
+                            g.seat_row,
+                            i.nickname,
+                            case 
+								when f.trip_type_id = 1 then 
+                                (
+									select GROUP_CONCAT(a.city separator ' - ') as `Route` 
+									from ms_stations_routes a
+									left join ms_routes b on b.id = a.routes_id
+                                    where b.is_active = 1 and b.id = f.route_id
+                                    group by b.id
+								) 
+								when f.trip_type_id = 2 then 
+                                (
+									select CONCAT_WS (' - ', a.origin, a.destination) as `Route`
+									from tr_trip_schedule a
+									where a.id = f.route_id
+								) 
+							end as route
+		                from tr_cancellation a 
+		                left join ms_status_seat b on b.id = a.status_seat_id
+		                left join ms_action c on c.id = a.action_id
+		                left join tr_reserved_seat d on d.id = a.reserved_seat_id
+		                left join tr_reserved_seat_header e on e.id = d.reserved_seat_header_id
+                        left join tr_trip f on f.id = e.trip_id
+		                -- left join tr_trip_schedule f on f.id = e.trip_schedule_id
+                        left join ms_seat g on g.id = d.seat_id
+                        -- left join tr_bus_trip_schedule h on h.trip_schedule_id = f.id
+                        left join ms_users i on i.id = f.route_id
+                        left join ms_routes j on j.id = f.route_id
+                        left join tr_trip_schedule k on k.id = f.route_id
+		                where a.action_id is not null";
+
+            return _sQLHelper.queryList<TRCancellationDto>(query, null).Result;
         }
     }
 }

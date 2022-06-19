@@ -134,15 +134,15 @@ namespace SeatBookingService.BusinessLogic
 
             if (obj.price <= 0 || string.IsNullOrEmpty(obj.price.ToString()))
             {
-                errMsg = "Price cannot be empty";
+                errMsg = "Harga tidak boleh kosong";
             }
             else if (string.IsNullOrWhiteSpace(obj.goods_type))
             {
-                errMsg = "Goods Type cannot be empty";
+                errMsg = "Tipe Barang tidak boleh kosong";
             }
             else if (string.IsNullOrWhiteSpace(obj.volume))
             {
-                errMsg = "Volume cannot be empty";
+                errMsg = "Volume Barang tidak boleh kosong";
             }
 
             res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
@@ -250,6 +250,8 @@ namespace SeatBookingService.BusinessLogic
                 errMsg = "Tidak ada bus yang dipilih, harap cek kembali data anda";
             }
 
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
             return res;
         }
     }
