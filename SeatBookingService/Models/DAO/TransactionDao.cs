@@ -178,9 +178,21 @@ namespace SeatBookingService.Models.DAO
 
         public List<HistorySeatDetailDto> GetHistorySeatDetail(int reserved_seat_header_id)
         {
-            var query = @"select a.id, a.seat_id, b.seat_row, b.seat_column 
+            var query = @"select 
+                            a.id, 
+                            a.seat_id, 
+                            b.seat_row, 
+                            b.seat_column, 
+                            c.status_seat_id, 
+                            d.status_name, 
+                            c.action_id, 
+                            e.action_name,
+                            case when c.status_seat_id is null then true else false end as allow_cancel
                             from tr_reserved_seat a
                             left join ms_seat b on b.id = a.seat_id
+                            left join tr_cancellation c on c.reserved_seat_id = a.id
+                            left join ms_status_seat d on d.id = c.status_seat_id
+                            left join ms_action e on e.id = c.action_id
                             where a.reserved_seat_header_id = @reserved_seat_header_id";
 
             var param = new Dictionary<string, object> {
