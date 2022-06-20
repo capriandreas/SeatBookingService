@@ -12,5 +12,6 @@ namespace SeatBookingService.Models.DTO
         public decimal total_price { get; set; }
         public string additional_information { get; set; }
         public string route { get; set; }
+        public string departure_hours { get; set; }
     }
 }

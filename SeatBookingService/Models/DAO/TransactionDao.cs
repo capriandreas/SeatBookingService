@@ -163,8 +163,20 @@ namespace SeatBookingService.Models.DAO
 									select CONCAT_WS (' - ', a.origin, a.destination) as `Route`
 									from tr_trip_schedule a
 									where a.id = b.route_id
+								) end as route,
+                                case 
+								when b.trip_type_id = 1 then 
+                                (
+									select departure_hours 
+									from ms_routes a
+                                    where a.is_active = 1 and a.id = b.route_id
 								) 
-							end as route
+								when b.trip_type_id = 2 then 
+                                (
+									select departure_hours 
+									from tr_trip_schedule a
+									where a.id = b.route_id
+								) end as departure_hours
 							from tr_reserved_seat_header a
                             left join tr_trip b on b.id = a.trip_id
                             where a.users_id = @users_id";
@@ -228,7 +240,7 @@ namespace SeatBookingService.Models.DAO
 									                    when a.trip_type_id = 2 then (select class_bus_id from tr_trip_schedule where id = a.route_id) 
 									                    end as class_bus_id
 								                    from tr_trip a
-								                    where a.id = @trip_id) order by seat_status desc";
+								                    where a.id = @trip_id)";
 
             var param = new Dictionary<string, object> {
                 { "trip_id", trip_id }
