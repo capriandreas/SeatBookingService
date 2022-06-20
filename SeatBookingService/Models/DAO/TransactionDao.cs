@@ -109,14 +109,14 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<TRExpeditionDto>(query, param).Result;
         }
 
-        public List<HistoryDetailDto> GetHistoryDetail(int trip_schedule_id, int users_id)
+        public List<HistoryDetailDto> GetHistoryDetail(int trip_id, int users_id)
         {
             var query = @"select a.id, a.price, a.additional_information 
                             from tr_reserved_seat_header a
-                            where a.users_id = @users_id and a.trip_schedule_id = @trip_schedule_id";
+                            where a.users_id = @users_id and a.trip_id = @trip_id";
 
             var param = new Dictionary<string, object> {
-                { "trip_schedule_id", trip_schedule_id },
+                { "trip_id", trip_id },
                 { "users_id", users_id },
             };
 

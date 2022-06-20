@@ -339,37 +339,6 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk get history detail
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        [HttpGet]
-        [Route("GetHistoryDetail")]
-        public async Task<IActionResult> GetHistoryDetail([FromQuery] int users_id, int trip_schedule_id)
-        {
-            var response = new APIResult<List<HistoryDetailDto>>();
-            var res = new BusinessLogicResult();
-
-            try
-            {
-                response.data = _transactionDao.GetHistoryDetail(trip_schedule_id, users_id);
-                response.data_records = response.data.Count;
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
-
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Digunakan untuk get history seat detail
         /// </summary>
         /// <returns>
@@ -915,6 +884,37 @@ namespace SeatBookingService.Controllers
             try
             {
                 response.data = _transactionDao.GetHistoryHeader(users_id);
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk get history detail
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetHistoryDetail")]
+        public async Task<IActionResult> GetHistoryDetail([FromQuery] int users_id, int trip_id)
+        {
+            var response = new APIResult<List<HistoryDetailDto>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetHistoryDetail(trip_id, users_id);
                 response.data_records = response.data.Count;
 
                 response.is_ok = true;
