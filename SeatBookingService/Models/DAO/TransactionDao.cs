@@ -332,7 +332,22 @@ namespace SeatBookingService.Models.DAO
 									from tr_trip_schedule a
 									where a.id = f.route_id
 								) 
-							end as route
+							end as route,
+                            case 
+								when f.trip_type_id = 1 then 
+                                (
+									select departure_hours 
+									from ms_routes a
+                                    where a.is_active = 1 and a.id = f.route_id
+								) 
+								when f.trip_type_id = 2 then 
+                                (
+									select departure_hours 
+									from tr_trip_schedule a
+									where a.id = f.route_id
+								) end as departure_hours,
+                            a.created_by as cancel_by_users_id,
+                            l.nickname as cancel_by_users_nickname
 		                from tr_cancellation a 
 		                left join ms_status_seat b on b.id = a.status_seat_id
 		                left join ms_action c on c.id = a.action_id
@@ -345,6 +360,7 @@ namespace SeatBookingService.Models.DAO
                         left join ms_users i on i.id = f.route_id
                         left join ms_routes j on j.id = f.route_id
                         left join tr_trip_schedule k on k.id = f.route_id
+                        left join ms_users l on l.id = a.created_by
 		                where a.action_id is null";
 
             return _sQLHelper.queryList<TRCancellationDto>(query, null).Result;
