@@ -108,14 +108,6 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.GetHistoryExpeditionDetail(System.Int32,System.Int32)">
-            <summary>
-            Digunakan untuk get history expedition detail
-            </summary>
-            <returns>
-            
-            </returns>
-        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateStationRoutes(SeatBookingService.Models.DTO.TRStationRoutesDto)">
             <summary>
             Digunakan untuk create station routes
@@ -247,6 +239,14 @@
         <member name="M:SeatBookingService.Controllers.TransactionController.GetHistorySeatDetail(System.Int32)">
             <summary>
             Digunakan untuk get history seat detail
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetHistoryExpeditionDetail(System.Int32,System.Int32)">
+            <summary>
+            Digunakan untuk get history expedition detail
             </summary>
             <returns>
             
