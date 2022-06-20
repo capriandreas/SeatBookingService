@@ -223,13 +223,15 @@ namespace SeatBookingService.Models.DAO
 		                    c.seat_column,
 		                    c.seat_row,
 		                    a.users_id,
-		                    CASE WHEN a.id is null or f.status_seat_id = 1 then 'Available' else 'Booked' end as seat_status,
+		                    CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
 		                    g.status_name,
 		                    f.reason,
 		                    a.trip_id,
 		                    h.trip_type_id
 		                    from tr_reserved_seat_header a
-		                    left join tr_reserved_seat b on b.reserved_seat_header_id = a.id
+		                    left join tr_reserved_seat b on b.reserved_seat_header_id = a.id and b.reserved_seat_header_id = (select a.id from tr_reserved_seat_header a 
+																											                    left join tr_trip b on b.id = a.trip_id 
+																											                    where a.trip_id = @trip_id)
 		                    right join ms_seat c on c.id = b.seat_id
 		                    left join tr_trip h on h.id = a.trip_id 
 		                    left join tr_cancellation f on f.reserved_seat_id = b.id
