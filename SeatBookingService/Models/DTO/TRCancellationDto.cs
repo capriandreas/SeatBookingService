@@ -19,5 +19,8 @@ namespace SeatBookingService.Models.DTO
         public string seat_row { get; set; }
         public string nickname { get; set; }
         public string route { get; set; }
+        public string departure_hours { get; set; }
+        public string cancel_by_users_id { get; set; }
+        public string cancel_by_users_nickname { get; set; }
     }
 }
