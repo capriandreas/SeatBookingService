@@ -46,9 +46,9 @@ namespace SeatBookingService.Models.DAO
 
         public List<MSBus> GetAllMasterBus()
         {
-            var query = @"select a.id, a.no_bus, a.no_polisi, a.jumlah_seat, a.kelas_id, b.kelas_bus 
+            var query = @"select a.id, a.no_bus, a.no_polisi, a.jumlah_seat, a.class_bus_id, b.class_bus 
                         from ms_bus a
-                        left join ms_kelas_bus b on b.id = a.kelas_id";
+                        left join ms_class_bus b on b.id = a.class_bus_id";
 
             return _sQLHelper.queryList<MSBus>(query, null).Result;
         }
