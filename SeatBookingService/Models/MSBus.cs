@@ -11,11 +11,11 @@ namespace SeatBookingService.Models
         public string no_bus { get; set; }
         public string no_polisi { get; set; }
         public int jumlah_seat { get; set; }
-        public int kelas_id { get; set; }
+        public int class_bus_id { get; set; }
+        public string class_bus { get; set; }
         public string created_by { get; set; }
         public DateTime created_date { get; set; }
         public string updated_by { get; set; }
         public DateTime updated_date { get; set; }
-        public string kelas_bus { get; set; }
     }
 }

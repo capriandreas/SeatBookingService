@@ -196,5 +196,33 @@ namespace SeatBookingService.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Digunakan untuk menampilkan seluruh station routes
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetAllStationRoutes")]
+        public async Task<IActionResult> GetAllStationRoutes()
+        {
+            var response = new APIResult<List<MSStationsRoutesDto>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _masterDataDao.GetAllStationRoutes();
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
     }
 }

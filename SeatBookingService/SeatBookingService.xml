@@ -60,6 +60,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.MasterDataController.GetAllStationRoutes">
+            <summary>
+            Digunakan untuk menampilkan seluruh station routes
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.CreateUser(SeatBookingService.Models.MSUsers)">
             <summary>
             Digunakan untuk create user agen dan pengemudi oleh user admin
