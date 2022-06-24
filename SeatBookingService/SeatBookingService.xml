@@ -260,6 +260,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.ChangePassword(SeatBookingService.Models.DTO.ChangePasswordDto)">
+            <summary>
+            Digunakan untuk action reject cancel seat oleh admin
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data

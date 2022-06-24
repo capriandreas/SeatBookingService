@@ -254,5 +254,34 @@ namespace SeatBookingService.BusinessLogic
             res.message = errMsg;
             return res;
         }
+
+        public static BusinessLogicResult ChangePassword(ChangePasswordDto obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (string.IsNullOrEmpty(obj.user_id.ToString()))
+            {
+                errMsg = "User ID tidak boleh kosong";
+            }
+            else if(string.IsNullOrEmpty(obj.password))
+            {
+                errMsg = "Password 1 tidak boleh kosong";
+            }
+            else if (string.IsNullOrEmpty(obj.verify_password))
+            {
+                errMsg = "Password 2 tidak boleh kosong";
+            }
+            else if (obj.password != obj.verify_password)
+            {
+                errMsg = "Password 1 dan 2 tidak sesuai";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
     }
 }

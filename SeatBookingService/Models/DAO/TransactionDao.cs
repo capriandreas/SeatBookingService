@@ -813,5 +813,21 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<TRCancellationDto>(query, null).Result;
         }
+
+        public bool ChangePassword(ChangePasswordDto obj)
+        {
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            query = @"update ms_users set password = @encrypted_password where id = @user_id";
+
+            param = new Dictionary<string, object> {
+                    { "user_id", obj.user_id },
+                    { "encrypted_password", obj.encrypted_password },
+                    { "verify_password", obj.verify_password }
+                };
+
+            return _sQLHelper.queryUpdate(query, param).Result > 0;
+        }
     }
 }

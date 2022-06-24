@@ -931,6 +931,43 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk action reject cancel seat oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto obj)
+        {
+            var response = new APIResult<List<TRCancellation>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.ChangePassword(obj);
+
+                if (res.result)
+                {
+                    string encryptPassword = EncryptionHelper.sha256(obj.password);
+                    obj.encrypted_password = encryptPassword;
+                    response.is_ok = _transactionDao.ChangePassword(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>
