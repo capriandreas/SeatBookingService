@@ -37,5 +37,7 @@ namespace SeatBookingService.Models.DAO
         public bool AssignBusStatus(List<TRBusAssignStatus> obj);
         public List<TRCancellationDto> GetListHistoryCancelSeat();
         public bool ChangePassword(ChangePasswordDto obj);
+        public bool AssignBusTrip(TRBusTripSchedule obj);
+        public List<MSBus> GetAllBusToAssign(DateTime? schedule_date);
     }
 }

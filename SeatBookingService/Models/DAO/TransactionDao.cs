@@ -829,5 +829,38 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryUpdate(query, param).Result > 0;
         }
+
+        public bool AssignBusTrip(TRBusTripSchedule obj)
+        {
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            query = @"insert into tr_bus_trip_schedule 
+                        (trip_id, no_bus, created_by, updated_by)
+                        values (@trip_id, @no_bus, @created_by, @created_by)";
+
+            param = new Dictionary<string, object> {
+                    { "trip_id", obj.trip_id },
+                    { "no_bus", obj.no_bus },
+                    { "created_by", obj.created_by }
+                };
+
+            return _sQLHelper.queryInsert(query, param).Result > 0;
+        }
+
+        public List<MSBus> GetAllBusToAssign(DateTime? schedule_date)
+        {
+            var query = @"select a.id, a.no_bus, a.no_polisi, a.jumlah_seat, a.class_bus_id, b.class_bus 
+                        from ms_bus a
+                        left join ms_class_bus b on b.id = a.class_bus_id
+                        left join tr_bus_assign_status c on c.no_bus = a.no_bus
+                        where c.assign_date = @schedule_date";
+
+            var param = new Dictionary<string, object> {
+                { "schedule_date", schedule_date }
+            };
+
+            return _sQLHelper.queryList<MSBus>(query, param).Result;
+        }
     }
 }

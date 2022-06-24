@@ -968,6 +968,72 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk action reject cancel seat oleh admin
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("AssignBusTrip")]
+        public async Task<IActionResult> AssignBusTrip([FromBody] TRBusTripSchedule obj)
+        {
+            var response = new APIResult<List<TRBusTripSchedule>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.AssignBusTrip(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.AssignBusTrip(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Digunakan untuk get history detail
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetAllBusToAssign")]
+        public async Task<IActionResult> GetAllBusToAssign([FromQuery] DateTime? schedule_date)
+        {
+            var response = new APIResult<List<MSBus>>();
+            var res = new BusinessLogicResult();
+
+            try
+            {
+                response.data = _transactionDao.GetAllBusToAssign(schedule_date);
+                response.data_records = response.data.Count;
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>

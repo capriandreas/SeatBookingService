@@ -283,5 +283,30 @@ namespace SeatBookingService.BusinessLogic
 
             return res;
         }
+
+        public static BusinessLogicResult AssignBusTrip(TRBusTripSchedule obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (string.IsNullOrEmpty(obj.trip_id.ToString()))
+            {
+                errMsg = "Trip ID tidak boleh kosong";
+            }
+            else if (string.IsNullOrEmpty(obj.no_bus))
+            {
+                errMsg = "No Bus tidak boleh kosong";
+            }
+            else if (string.IsNullOrEmpty(obj.created_by))
+            {
+                errMsg = "Created By tidak boleh kosong";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
     }
 }

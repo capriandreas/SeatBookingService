@@ -8,7 +8,7 @@ namespace SeatBookingService.Models
     public class TRBusTripSchedule
     {
         public int id { get; set; }
-        public int trip_schedule_id { get; set; }
+        public int trip_id { get; set; }
         public string no_bus { get; set; }
         public string created_by { get; set; }
         public DateTime created_date { get; set; }
