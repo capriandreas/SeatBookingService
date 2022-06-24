@@ -862,5 +862,20 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<MSBus>(query, param).Result;
         }
+
+        public List<MSBus> GetAllBusAssignValidation(TRBusTripSchedule obj)
+        {
+            var query = @"select a.no_bus, a.trip_id
+                        from tr_bus_trip_schedule a
+                        left join tr_trip b on b.id = a.trip_id
+                        where no_bus = @no_bus and b.schedule_date = (select schedule_date from tr_trip where id = @trip_id)";
+
+            var param = new Dictionary<string, object> {
+                { "trip_id", obj.trip_id },
+                { "no_bus", obj.no_bus }
+            };
+
+            return _sQLHelper.queryList<MSBus>(query, param).Result;
+        }
     }
 }

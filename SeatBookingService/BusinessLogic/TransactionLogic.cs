@@ -284,7 +284,7 @@ namespace SeatBookingService.BusinessLogic
             return res;
         }
 
-        public static BusinessLogicResult AssignBusTrip(TRBusTripSchedule obj)
+        public static BusinessLogicResult AssignBusTrip(TRBusTripSchedule obj, List<MSBus> checkIfAssigned)
         {
             BusinessLogicResult res = new BusinessLogicResult();
 
@@ -301,6 +301,10 @@ namespace SeatBookingService.BusinessLogic
             else if (string.IsNullOrEmpty(obj.created_by))
             {
                 errMsg = "Created By tidak boleh kosong";
+            }
+            else if(checkIfAssigned.Count > 0)
+            {
+                errMsg = "Trip ini sudah di assign dengan No Bus : " + checkIfAssigned[0].no_bus;
             }
 
             res.result = !string.IsNullOrEmpty(errMsg) ? false : true;

@@ -982,7 +982,8 @@ namespace SeatBookingService.Controllers
 
             try
             {
-                res = TransactionLogic.AssignBusTrip(obj);
+                List<MSBus> checkIfAssigned = _transactionDao.GetAllBusAssignValidation(obj);
+                res = TransactionLogic.AssignBusTrip(obj, checkIfAssigned);
 
                 if (res.result)
                 {
