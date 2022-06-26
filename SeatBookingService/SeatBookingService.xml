@@ -292,6 +292,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetTripAssignToBus(SeatBookingService.Models.DTO.TripDetailParamDto)">
+            <summary>
+            Digunakan untuk menampilkan seluruh trip baik regular maupun non regular
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data

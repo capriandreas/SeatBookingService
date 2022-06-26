@@ -1066,6 +1066,46 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk menampilkan seluruh trip baik regular maupun non regular
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetTripAssignToBus")]
+        public async Task<IActionResult> GetTripAssignToBus([FromQuery] TripDetailParamDto obj)
+        {
+            var response = new APIResult<TRTrip>();
+            BusSeatDetails busSeat = new BusSeatDetails();
+            try
+            {
+                response.is_ok = true;
+
+                #region check if data exists
+                TRTrip trTrip = _transactionDao.GetTrTrip(obj);
+                if (trTrip == null)
+                {
+                    bool isSuccessInsert = _transactionDao.CreateTrTrip(obj);
+                }
+                #endregion
+
+                TRTrip getTrTrip = _transactionDao.GetTrTrip(obj);
+                busSeat.trip_id = getTrTrip.id;
+
+                response.data = getTrTrip;
+                response.data_records = 1;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>
