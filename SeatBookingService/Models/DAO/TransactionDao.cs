@@ -216,23 +216,27 @@ namespace SeatBookingService.Models.DAO
 
         public List<MSSeatDto> GetListAllSeat(int trip_id)
         {
-            var query = @"select 	
+            var query = @"select * from (
+                            select 	
+							a.id,
 		                    b.id as reserved_seat_id,
 		                    c.id as seat_id,
+                            c.seat_order,
 		                    c.class_bus_id,
 		                    c.seat_column,
 		                    c.seat_row,
 		                    a.users_id,
-		                    CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
+                            'Booked' as seat_status,
+		                    -- CASE WHEN a.id is null then 'Available' else 'Booked' end as seat_status,
 		                    g.status_name,
 		                    f.reason,
 		                    a.trip_id,
 		                    h.trip_type_id
 		                    from tr_reserved_seat_header a
-		                    left join tr_reserved_seat b on b.reserved_seat_header_id = a.id and b.reserved_seat_header_id = (select a.id from tr_reserved_seat_header a 
+		                    left join tr_reserved_seat b on b.reserved_seat_header_id = a.id and b.reserved_seat_header_id in (select a.id from tr_reserved_seat_header a 
 																											                    left join tr_trip b on b.id = a.trip_id 
 																											                    where a.trip_id = @trip_id)
-		                    right join ms_seat c on c.id = b.seat_id
+		                    left join ms_seat c on c.id = b.seat_id
 		                    left join tr_trip h on h.id = a.trip_id 
 		                    left join tr_cancellation f on f.reserved_seat_id = b.id
 		                    left join ms_status_seat g on g.id = f.status_seat_id
@@ -242,7 +246,36 @@ namespace SeatBookingService.Models.DAO
 									                    when a.trip_type_id = 2 then (select class_bus_id from tr_trip_schedule where id = a.route_id) 
 									                    end as class_bus_id
 								                    from tr_trip a
-								                    where a.id = @trip_id)";
+								                    where a.id = @trip_id)
+                                                    
+                            UNION
+                            select null as id, null as reserved_seat_id, a.id as seat_id, a.seat_order, a.class_bus_id, a.seat_column, a.seat_row, null as users_id, 'Available' as seat_status, null as status_name, null as reason, null as trip_id, null as trip_type_id
+                            from ms_seat a 
+                            where a.class_bus_id = (select 
+							                            case 
+							                            when a.trip_type_id = 1 then (select class_bus_id from ms_routes where id = a.route_id) 
+							                            when a.trip_type_id = 2 then (select class_bus_id from tr_trip_schedule where id = a.route_id) 
+							                            end as class_bus_id
+						                            from tr_trip a
+						                            where a.id = @trip_id)
+                            and a.id not in (select 	
+		                                                c.id as seat_id
+		                                                from tr_reserved_seat_header a
+		                                                left join tr_reserved_seat b on b.reserved_seat_header_id = a.id and b.reserved_seat_header_id in (select a.id from tr_reserved_seat_header a 
+																											                                                left join tr_trip b on b.id = a.trip_id 
+																											                                                where a.trip_id = @trip_id)
+		                                                left join ms_seat c on c.id = b.seat_id
+		                                                left join tr_trip h on h.id = a.trip_id 
+		                                                left join tr_cancellation f on f.reserved_seat_id = b.id
+		                                                left join ms_status_seat g on g.id = f.status_seat_id
+		                                                where c.class_bus_id = (select 
+									                                                case 
+									                                                when a.trip_type_id = 1 then (select class_bus_id from ms_routes where id = a.route_id) 
+									                                                when a.trip_type_id = 2 then (select class_bus_id from tr_trip_schedule where id = a.route_id) 
+									                                                end as class_bus_id
+								                                                from tr_trip a
+								                                                where a.id = @trip_id))
+                            ) a order by seat_order asc";
 
             var param = new Dictionary<string, object> {
                 { "trip_id", trip_id }
