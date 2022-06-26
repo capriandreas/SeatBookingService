@@ -1,4 +1,5 @@
 ﻿using SeatBookingService.Models;
+using System;
 using System.Collections.Generic;
 
 namespace SeatBookingService.BusinessLogic
@@ -38,6 +39,7 @@ namespace SeatBookingService.BusinessLogic
         {
             int loopTotal = 0;
             int counter = 0;
+            int counter_seat_order = 1;
 
             List<string> listSeat = new List<string>();
 
@@ -56,8 +58,9 @@ namespace SeatBookingService.BusinessLogic
                     if (totalSeat == listSeat.Count)
                         break;
                     seat = i.ToString();
-                    seat = seat + "," + item;
+                    seat = seat + "," + item + "," + counter_seat_order;
                     listSeat.Add(seat);
+                    counter_seat_order++;
                 }
                 counter++;
             }
@@ -74,16 +77,20 @@ namespace SeatBookingService.BusinessLogic
             {
                 MSSeat seat = new MSSeat();
                 string[] words = item.Split(',');
-                foreach (string word in words)
-                {
-                    seat.class_bus_id = obj.class_bus_id;
-                    if (counter == 1)
-                        seat.seat_row = word.ToString();
-                    else if (counter == 2)
-                        seat.seat_column = word.ToString();
+                seat.class_bus_id = obj.class_bus_id;
+                seat.seat_row = words[0].ToString();
+                seat.seat_column = words[1].ToString();
+                seat.seat_order = Convert.ToInt32(words[2]);
+                //foreach (string word in words)
+                //{
+                //    seat.class_bus_id = obj.class_bus_id;
+                //    if (counter == 1)
+                //        seat.seat_row = word.ToString();
+                //    else if (counter == 2)
+                //        seat.seat_column = word.ToString();
 
-                    counter++;
-                }
+                //    counter++;
+                //}
                 result.Add(seat);
                 counter = 1;
             }

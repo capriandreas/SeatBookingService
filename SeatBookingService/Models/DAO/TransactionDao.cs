@@ -464,12 +464,13 @@ namespace SeatBookingService.Models.DAO
 
             foreach (var item in obj)
             {
-                query = @"insert into ms_seat (class_bus_id, seat_column, seat_row) values (@class_bus_id, @seat_column, @seat_row);";
+                query = @"insert into ms_seat (class_bus_id, seat_column, seat_row, seat_order) values (@class_bus_id, @seat_column, @seat_row, @seat_order);";
 
                 param = new Dictionary<string, object> {
                     { "class_bus_id", item.class_bus_id },
                     { "seat_column", item.seat_column },
-                    { "seat_row", item.seat_row }
+                    { "seat_row", item.seat_row },
+                    { "seat_order", item.seat_order }
                 };
 
                 result = _sQLHelper.queryInsert(query, param).Result > 0;

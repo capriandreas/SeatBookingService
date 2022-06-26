@@ -1123,7 +1123,7 @@ namespace SeatBookingService.Controllers
                 res = MasterDataLogic.GenerateMasterSeat(obj);
                 List<MSSeat> listSeat = MasterDataLogic.MappingSeatToModel(res.data, obj);
 
-                //response.data = res.data;
+                response.data = res.data;
                 response.is_ok = _transactionDao.InsertMasterSeat(listSeat);
                 response.httpCode = HttpStatusCode.OK;
                 response.message = res.message;
