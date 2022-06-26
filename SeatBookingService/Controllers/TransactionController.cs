@@ -931,7 +931,7 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk action reject cancel seat oleh admin
+        /// Digunakan untuk mengganti password oleh user
         /// </summary>
         /// <returns>
         /// 
@@ -968,7 +968,7 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk action reject cancel seat oleh admin
+        /// Digunakan untuk nge-Assign bus dengan trip tertentu
         /// </summary>
         /// <returns>
         /// 
@@ -1004,7 +1004,7 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk get history detail
+        /// Digunakan untuk get seluruh bus yang akan di assign
         /// </summary>
         /// <returns>
         /// 
@@ -1035,7 +1035,7 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk get history detail
+        /// Digunakan untuk report summary
         /// </summary>
         /// <returns>
         /// 
@@ -1066,7 +1066,7 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
-        /// Digunakan untuk menampilkan seluruh trip baik regular maupun non regular
+        /// Digunakan untuk menampilkan seluruh trip baik regular maupun non regular yang akan di assign ke bus
         /// </summary>
         /// <returns>
         /// 
