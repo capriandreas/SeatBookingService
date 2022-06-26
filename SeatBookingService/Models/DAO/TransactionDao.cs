@@ -877,5 +877,56 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<MSBus>(query, param).Result;
         }
+
+        public List<GetSummaryReportDto> GetSummaryReport(DateTime? schedule_date)
+        {
+            var query = @"select *, 
+	                        case 
+		                        when a.trip_type_id = 1 then 
+		                        (
+			                        select GROUP_CONCAT(a.city separator ' - ') as `Route` 
+			                        from ms_stations_routes a
+			                        left join ms_routes b on b.id = a.routes_id
+			                        where b.is_active = 1 and b.id = a.route_id
+			                        group by b.id
+		                        ) 
+		                        when a.trip_type_id = 2 then 
+		                        (
+			                        select CONCAT_WS (' - ', a.origin, a.destination) as `Route`
+			                        from tr_trip_schedule a
+			                        where a.id = a.route_id
+		                        ) 
+	                        end as route
+                        from (
+	                        select a.no_bus, b.no_polisi, c.class_bus, d.status_bus, a.station, a.description,
+	                        (select a.trip_type_id from tr_trip a
+		                        left join tr_bus_trip_schedule b on a.id = b.trip_id 
+		                        where b.no_bus = a.no_bus and a.schedule_date = @schedule_date) as trip_type_id,
+	                        (select a.route_id from tr_trip a
+	                        left join tr_bus_trip_schedule b on a.id = b.trip_id 
+	                        where b.no_bus = a.no_bus and a.schedule_date = @schedule_date) as route_id
+	                        from tr_bus_assign_status a
+	                        left join ms_bus b on a.no_bus = b.no_bus
+	                        left join ms_class_bus c on c.id = b.class_bus_id
+	                        left join ms_status_bus d on d.id = a.status_bus_id
+	                        where a.assign_date = @schedule_date and a.created_date = (select max(b.created_date) from tr_bus_assign_status b where b.no_bus = a.no_bus) 
+                        ) a
+                        UNION 
+                        select a.no_bus, a.no_polisi, b.class_bus, '' as status_bus, '' as station, '' as description, null as trip_type_id, null as route_id, '' as route
+                        from ms_bus a
+                        left join ms_class_bus b on b.id = a.class_bus_id 
+                        where a.no_bus not in (select a.no_bus
+                        from tr_bus_assign_status a
+                        left join ms_bus b on a.no_bus = b.no_bus
+                        left join ms_class_bus c on c.id = b.class_bus_id
+                        left join ms_status_bus d on d.id = a.status_bus_id
+                        where a.assign_date = @schedule_date and a.created_date = (select max(b.created_date) from tr_bus_assign_status b where b.no_bus = a.no_bus))";
+
+            var param = new Dictionary<string, object> {
+                { "schedule_date", schedule_date }
+            };
+
+            return _sQLHelper.queryList<GetSummaryReportDto>(query, param).Result;
+        }
     }
 }

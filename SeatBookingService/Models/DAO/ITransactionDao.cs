@@ -40,5 +40,6 @@ namespace SeatBookingService.Models.DAO
         public bool AssignBusTrip(TRBusTripSchedule obj);
         public List<MSBus> GetAllBusToAssign(DateTime? schedule_date);
         public List<MSBus> GetAllBusAssignValidation(TRBusTripSchedule obj);
+        public List<GetSummaryReportDto> GetSummaryReport(DateTime? schedule_date);
     }
 }
