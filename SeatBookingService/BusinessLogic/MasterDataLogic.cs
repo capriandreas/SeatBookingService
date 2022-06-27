@@ -1,4 +1,5 @@
 ﻿using SeatBookingService.Models;
+using SeatBookingService.Models.DTO;
 using System;
 using System.Collections.Generic;
 
@@ -96,6 +97,39 @@ namespace SeatBookingService.BusinessLogic
             }
 
             return result;
+        }
+
+        public static BusinessLogicResult UpdateRoutesReguler(TRStationRoutesDto obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if(string.IsNullOrEmpty(obj.id.ToString()))
+            {
+                errMsg = "ID tidak boleh kosong";
+            }
+            else if (string.IsNullOrEmpty(obj.class_bus_id.ToString()))
+            {
+                errMsg = "Kelas Bus tidak boleh kosong";
+            }
+            else if(obj.stationRoutes.Count < 0)
+            {
+                errMsg = "Daftar kota tidak boleh kosong";
+            }
+            else if(obj.stationRoutes.Count == 1)
+            {
+                errMsg = "Daftar kota harus lebih dari 1";
+            }
+            else if(string.IsNullOrEmpty(obj.created_by))
+            {
+                errMsg = "Created By tidak boleh kosong";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
         }
     }
 }

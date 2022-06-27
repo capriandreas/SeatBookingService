@@ -93,5 +93,63 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<MSStationsRoutesDto>(query, null).Result;
         }
+
+        public bool UpdateRoutesReguler(TRStationRoutesDto obj)
+        {
+            bool result = false;
+            var query = string.Empty;
+            var param = new Dictionary<string, object>();
+
+            query = @"update ms_routes 
+                        set 
+	                        class_bus_id = @class_bus_id,
+                            departure_hours = @departure_hours,
+                            description = @description
+                        where id = @id;";
+
+            param = new Dictionary<string, object> {
+                    { "id", obj.id },
+                    { "class_bus_id", obj.class_bus_id },
+                    { "departure_hours", obj.departure_hours },
+                    { "description", obj.description },
+                };
+
+            bool resultUpdate = _sQLHelper.queryUpdate(query, param).Result > 0;
+
+            #region Insert into ms_stations_routes
+            if(resultUpdate)
+            {
+                query = @"delete from ms_stations_routes where routes_id = @id;";
+
+                param = new Dictionary<string, object> {
+                    { "id", obj.id }
+                };
+
+                bool resultDelete = _sQLHelper.queryDelete(query, param).Result > 0;
+
+                if(resultDelete)
+                {
+                    foreach (var item in obj.stationRoutes)
+                    {
+                        query = @"insert into ms_stations_routes 
+                        (routes_id, city, route_order, created_by, updated_by)
+                        values (@routes_id, @city, @route_order, @created_by, @created_by)";
+
+                        param = new Dictionary<string, object> {
+                                { "routes_id", obj.id },
+                                { "city", item.city },
+                                { "route_order", item.route_order },
+                                { "created_by", obj.created_by }
+                            };
+
+                        result = _sQLHelper.queryInsert(query, param).Result > 0;
+                    }
+                }
+            }
+
+            #endregion
+
+            return result;
+        }
     }
 }

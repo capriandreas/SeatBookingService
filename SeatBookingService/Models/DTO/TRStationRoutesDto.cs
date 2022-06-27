@@ -4,6 +4,7 @@ namespace SeatBookingService.Models.DTO
 {
     public class TRStationRoutesDto
     {
+        public int id { get; set; }
         public int class_bus_id { get; set; }
         public string departure_hours { get; set; }
         public string description { get; set; }
