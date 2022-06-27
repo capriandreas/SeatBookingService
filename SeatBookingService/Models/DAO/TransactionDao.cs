@@ -669,7 +669,9 @@ namespace SeatBookingService.Models.DAO
                             a.departure_hours,
                             a.class_bus,
                             a.description,
-                            b.*
+                            b.*,
+                            -- c.*,
+                            d.no_bus
                           from
                             (
 	                            select 
@@ -704,7 +706,9 @@ namespace SeatBookingService.Models.DAO
                                                         trip_type_name varchar(255) path '$.trip_type_name'
                                                         )
                                              ) result
-	                                    where a.key = 'trip_type') b on b.trip_type_id = a.trip_type_id";
+	                                    where a.key = 'trip_type') b on b.trip_type_id = a.trip_type_id
+                            left join tr_trip c on c.route_id = a.id_route and c.trip_type_id = b.trip_type_id and c.schedule_date = @schedule_date
+                            left join tr_bus_trip_schedule d on d.trip_id = c.id";
 
             param = new Dictionary<string, object> {
                     { "schedule_date", schedule_date }

@@ -9,5 +9,6 @@
         public string description { get; set; }
         public int trip_type_id { get; set; }
         public string trip_type_name { get; set; }
+        public string no_bus { get; set; }
     }
 }
