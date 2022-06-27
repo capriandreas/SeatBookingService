@@ -887,8 +887,7 @@ namespace SeatBookingService.Models.DAO
             var query = @"select a.id, a.no_bus, a.no_polisi, a.jumlah_seat, a.class_bus_id, b.class_bus 
                         from ms_bus a
                         left join ms_class_bus b on b.id = a.class_bus_id
-                        left join tr_bus_assign_status c on c.no_bus = a.no_bus
-                        where c.assign_date = @schedule_date";
+                        where a.no_bus not in (select a.no_bus from (select no_bus, max(created_date) as created_date from tr_bus_assign_status where assign_date = @schedule_date group by no_bus) a)";
 
             var param = new Dictionary<string, object> {
                 { "schedule_date", schedule_date }
