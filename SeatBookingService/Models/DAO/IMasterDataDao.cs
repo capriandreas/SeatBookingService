@@ -17,5 +17,7 @@ namespace SeatBookingService.Models.DAO
         public List<MSStationsRoutesDto> GetAllStationRoutes();
 
         public bool UpdateRoutesReguler(TRStationRoutesDto obj);
+        public MSRoutes GetMSRoutes(int id);
+        public List<MSStationRoutes> GetMSStationRoutes(int routes_id);
     }
 }

@@ -94,6 +94,28 @@ namespace SeatBookingService.Models.DAO
             return _sQLHelper.queryList<MSStationsRoutesDto>(query, null).Result;
         }
 
+        public MSRoutes GetMSRoutes(int id)
+        {
+            var query = @"select * from ms_routes where id = @id";
+
+            var param = new Dictionary<string, object> {
+                { "id", id }
+            };
+
+            return _sQLHelper.querySingle<MSRoutes>(query, param).Result;
+        }
+
+        public List<MSStationRoutes> GetMSStationRoutes(int routes_id)
+        {
+            var query = @"select * from ms_stations_routes where routes_id = @routes_id";
+
+            var param = new Dictionary<string, object> {
+                { "routes_id", routes_id }
+            };
+
+            return _sQLHelper.queryList<MSStationRoutes>(query, param).Result;
+        }
+
         public bool UpdateRoutesReguler(TRStationRoutesDto obj)
         {
             bool result = false;
