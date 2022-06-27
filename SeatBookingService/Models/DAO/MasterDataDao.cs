@@ -78,9 +78,9 @@ namespace SeatBookingService.Models.DAO
 
         public List<MSStationsRoutesDto> GetAllStationRoutes()
         {
-            var query = @" select 
+            var query = @"select 
                                     b.id as 'id_route',
-		                            GROUP_CONCAT(a.city separator ' - ') as `Route`,
+		                            GROUP_CONCAT(a.city order by a.route_order separator ' - ' ) as `Route`,
 		                            b.departure_hours,
 		                            c.class_bus,
 		                            b.description,
