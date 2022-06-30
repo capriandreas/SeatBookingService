@@ -702,17 +702,19 @@ namespace SeatBookingService.Models.DAO
 	                            where b.is_active = 1
 	                            group by b.id
                             UNION
-	                            select 
-                                    a.id as 'id_route',
-		                            CONCAT_WS (' - ', a.origin, a.destination) as `Route`,
-		                            a.departure_hours,
-		                            b.class_bus,
-		                            a.description,
+                                select 
+                                    b.id as 'id_route',
+		                            GROUP_CONCAT(a.city order by a.route_order separator ' - ') as `Route`,
+		                            b.departure_hours,
+		                            c.class_bus,
+		                            b.description,
 		                            2 as trip_type_id
-	                            from tr_trip_schedule a
-                                left join ms_class_bus b on b.id = a.class_bus_id "
-                                + (schedule_date != null && schedule_date.HasValue ? @"where a.schedule_date = @schedule_date" : string.Empty)
-                            + @") a 
+	                            from tr_trip_schedule_routes a
+	                            left join tr_trip_schedule b on b.id = a.trip_schedule_id
+	                            left join ms_class_bus c on c.id = b.class_bus_id
+                                where b.schedule_date = @schedule_date
+	                            group by b.id
+                            ) a 
                             left join (select result.*
 	                                    from ms_settings a,
                                          json_table(a.data,
