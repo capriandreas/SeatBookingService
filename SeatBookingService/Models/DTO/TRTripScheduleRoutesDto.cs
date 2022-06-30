@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SeatBookingService.Models
+namespace SeatBookingService.Models.DTO
 {
-    public class TRTripSchedule
+    public class TRTripScheduleRoutesDto
     {
         public int id { get; set; }
         public int class_bus_id { get; set; }
@@ -13,8 +11,12 @@ namespace SeatBookingService.Models
         public string departure_hours { get; set; }
         public string description { get; set; }
         public string created_by { get; set; }
-        public DateTime created_date { get; set; }
-        public string updated_by { get; set; }
-        public DateTime updated_date { get; set; }
+        public List<TRTripScheduleRoutes> tripRoutes { get; set; }
+    }
+
+    public class TRTripScheduleRoutes
+    {
+        public string city { get; set; }
+        public int route_order { get; set; }
     }
 }

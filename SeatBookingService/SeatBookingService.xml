@@ -140,7 +140,7 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.CreateTripScheduleNonRegular(SeatBookingService.Models.TRTripSchedule)">
+        <member name="M:SeatBookingService.Controllers.TransactionController.CreateTripScheduleNonRegular(SeatBookingService.Models.DTO.TRTripScheduleRoutesDto)">
             <summary>
             Digunakan untuk create trip schedule (non regular) oleh admin
             </summary>

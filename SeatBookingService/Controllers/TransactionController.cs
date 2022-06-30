@@ -374,7 +374,7 @@ namespace SeatBookingService.Controllers
         /// </returns>
         [HttpPost]
         [Route("CreateTripScheduleNonRegular")]
-        public async Task<IActionResult> CreateTripScheduleNonRegular(TRTripSchedule obj)
+        public async Task<IActionResult> CreateTripScheduleNonRegular(TRTripScheduleRoutesDto obj)
         {
             var response = new APIResult<List<TRTripSchedule>>();
             BusinessLogicResult res = new BusinessLogicResult();

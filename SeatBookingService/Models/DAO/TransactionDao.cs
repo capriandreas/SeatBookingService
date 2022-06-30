@@ -541,7 +541,7 @@ namespace SeatBookingService.Models.DAO
 
                 result = _sQLHelper.queryInsert(query, param).Result > 0;
             }
-            
+
             #endregion
 
             return result;
@@ -566,7 +566,7 @@ namespace SeatBookingService.Models.DAO
                     { "destination_additional_information", obj.destination_additional_information },
                     { "created_by", obj.created_by }
                 };
-            
+
             int trip_schedule_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
             #endregion
 
@@ -631,7 +631,7 @@ namespace SeatBookingService.Models.DAO
             return result;
         }
 
-        public bool CreateTripScheduleNonRegular(TRTripSchedule obj)
+        public bool CreateTripScheduleNonRegular(TRTripScheduleRoutesDto obj)
         {
             bool result = false;
             var query = string.Empty;
@@ -639,22 +639,37 @@ namespace SeatBookingService.Models.DAO
 
             #region Insert into tr_trip_schedule
             query = @"insert into tr_trip_schedule 
-                        (class_bus_id, schedule_date, origin, origin_additional_information, destination, destination_additional_information, departure_hours, description, created_by, updated_by)
-                        values (@class_bus_id, @schedule_date, @origin, @origin_additional_information, @destination, @destination_additional_information, @departure_hours, @description, @created_by, @created_by)";
+                        (class_bus_id, schedule_date, departure_hours, description, created_by, updated_by)
+                        values (@class_bus_id, @schedule_date, @departure_hours, @description, @created_by, @created_by)";
 
             param = new Dictionary<string, object> {
                     { "class_bus_id", obj.class_bus_id },
                     { "schedule_date", obj.schedule_date },
-                    { "origin", obj.origin },
-                    { "origin_additional_information", obj.origin_additional_information },
-                    { "destination", obj.destination },
-                    { "destination_additional_information", obj.destination_additional_information },
                     { "departure_hours", obj.departure_hours },
                     { "description", obj.description },
                     { "created_by", obj.created_by }
                 };
 
-            result = _sQLHelper.queryInsert(query, param).Result > 0;
+            int trip_schedule_id = _sQLHelper.queryInsertWithReturningId(query, param).Result;
+            #endregion
+
+            #region Insert into ms_stations_routes
+            foreach (var item in obj.tripRoutes)
+            {
+                query = @"insert into tr_trip_schedule_routes 
+			            (trip_schedule_id, city, route_order, created_by, updated_by)
+			            values (@trip_schedule_id, @city, @route_order, @created_by, @created_by)";
+
+                param = new Dictionary<string, object> {
+                        { "trip_schedule_id", trip_schedule_id },
+                        { "city", item.city },
+                        { "route_order", item.route_order },
+                        { "created_by", obj.created_by }
+                };
+
+                result = _sQLHelper.queryInsert(query, param).Result > 0;
+            }
+
             #endregion
 
             return result;
