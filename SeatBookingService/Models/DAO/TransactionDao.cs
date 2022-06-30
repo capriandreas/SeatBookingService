@@ -982,5 +982,28 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<GetSummaryReportDto>(query, param).Result;
         }
+
+        public List<TripNonRegulerDto> GetAllTripScheduleNonReguler(DateTime? schedule_date)
+        {
+            var query = @"select 
+                                    b.id as 'id_route',
+		                            GROUP_CONCAT(a.city order by a.route_order separator ' - ') as `Route`,
+		                            b.departure_hours,
+		                            c.class_bus,
+		                            b.description,
+		                            2 as trip_type_id
+	                            from tr_trip_schedule_routes a
+	                            left join tr_trip_schedule b on b.id = a.trip_schedule_id
+	                            left join ms_class_bus c on c.id = b.class_bus_id "
+                                + (schedule_date != null ? @" where b.schedule_date = @schedule_date" : string.Empty)
+                                + @"
+	                            group by b.id";
+
+            var param = new Dictionary<string, object> {
+                { "schedule_date", schedule_date }
+            };
+
+            return _sQLHelper.queryList<TripNonRegulerDto>(query, param).Result;
+        }
     }
 }

@@ -316,6 +316,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetAllTripScheduleNonReguler(System.Nullable{System.DateTime})">
+            <summary>
+            Digunakan untuk menampilkan seluruh trip schedule non reguler
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data
