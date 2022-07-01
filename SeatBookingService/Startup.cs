@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using SeatBookingService.Helper;
+using SeatBookingService.Middleware;
 using SeatBookingService.Models.DAO;
 using System;
 using System.Collections.Generic;
@@ -107,6 +108,8 @@ namespace SeatBookingService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.ConfigureExceptionHandler();
 
             app.UseRouting();
             app.UseAuthentication();
