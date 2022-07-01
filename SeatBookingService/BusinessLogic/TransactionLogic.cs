@@ -234,6 +234,7 @@ namespace SeatBookingService.BusinessLogic
                         errMsg = "Nama kota tidak boleh kosong (Urutan: " + counter + ")";
                         break;
                     }
+                    counter++;
                 }
             }
 
@@ -309,6 +310,52 @@ namespace SeatBookingService.BusinessLogic
             else if(checkIfAssigned.Count > 0)
             {
                 errMsg = "Trip ini sudah di assign dengan No Bus : " + checkIfAssigned[0].no_bus;
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
+
+        public static BusinessLogicResult UpdateRoutesNonReguler(TRTripScheduleRoutesDto obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+            int counter = 1;
+
+            string errMsg = string.Empty;
+
+            if (string.IsNullOrEmpty(obj.id.ToString()))
+            {
+                errMsg = "ID tidak boleh kosong";
+            }
+            else if (string.IsNullOrEmpty(obj.class_bus_id.ToString()))
+            {
+                errMsg = "Kelas Bus tidak boleh kosong";
+            }
+            else if (obj.tripRoutes.Count < 0)
+            {
+                errMsg = "Daftar kota tidak boleh kosong";
+            }
+            else if (obj.tripRoutes.Count == 1)
+            {
+                errMsg = "Daftar kota harus lebih dari 1";
+            }
+            else if (string.IsNullOrEmpty(obj.created_by))
+            {
+                errMsg = "Created By tidak boleh kosong";
+            }
+            else if (obj.tripRoutes.Count > 0)
+            {
+                foreach (var item in obj.tripRoutes)
+                {
+                    if (string.IsNullOrEmpty(item.city) || string.IsNullOrWhiteSpace(item.city))
+                    {
+                        errMsg = "Nama kota tidak boleh kosong (Urutan: " + counter + ")";
+                        break;
+                    }
+                    counter++;
+                }
             }
 
             res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
