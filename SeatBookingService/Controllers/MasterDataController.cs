@@ -286,6 +286,7 @@ namespace SeatBookingService.Controllers
                     result.class_bus_id = routes.class_bus_id;
                     result.departure_hours = routes.departure_hours;
                     result.description = routes.description;
+                    result.created_by = routes.created_by;
                 }
 
                 if(stationRoutes != null && stationRoutes.Count > 0)

@@ -1134,6 +1134,61 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetTripNonRegulerDetails")]
+        public async Task<IActionResult> GetTripNonRegulerDetails([FromQuery] int id)
+        {
+            var response = new APIResult<TRTripScheduleRoutesDto>();
+
+            try
+            {
+                TRTripScheduleRoutesDto result = new TRTripScheduleRoutesDto();
+                TRTripSchedule routes = _transactionDao.GetTrTripScheduleDetail(id);
+                List<TRTripScheduleRoutes> tripRoutes = _transactionDao.GetTripScheduleRoutesDetail(id);
+
+                if (routes != null)
+                {
+                    result.id = routes.id;
+                    result.class_bus_id = routes.class_bus_id;
+                    result.schedule_date = routes.schedule_date;
+                    result.departure_hours = routes.departure_hours;
+                    result.description = routes.description;
+                    result.created_by = routes.created_by;
+                }
+
+                if (tripRoutes != null && tripRoutes.Count > 0)
+                {
+                    result.tripRoutes = new List<TripScheduleRoutes>();
+                    foreach (var item in tripRoutes)
+                    {
+                        result.tripRoutes.Add(new TripScheduleRoutes
+                        {
+                            route_order = item.route_order,
+                            city = item.city
+                        });
+                    }
+                }
+
+                response.is_ok = true;
+                response.data = result;
+                response.data_records = 1;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk edit routes dan station routes
         /// </summary>
         /// <returns>

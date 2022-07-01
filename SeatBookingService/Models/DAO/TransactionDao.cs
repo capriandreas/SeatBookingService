@@ -991,7 +991,8 @@ namespace SeatBookingService.Models.DAO
 		                            b.departure_hours,
 		                            c.class_bus,
 		                            b.description,
-		                            2 as trip_type_id
+		                            2 as trip_type_id,
+                                    b.schedule_date
 	                            from tr_trip_schedule_routes a
 	                            left join tr_trip_schedule b on b.id = a.trip_schedule_id
 	                            left join ms_class_bus c on c.id = b.class_bus_id "
@@ -1064,6 +1065,28 @@ namespace SeatBookingService.Models.DAO
             #endregion
 
             return result;
+        }
+
+        public TRTripSchedule GetTrTripScheduleDetail(int id)
+        {
+            var query = @"select * from tr_trip_schedule where id = @id";
+
+            var param = new Dictionary<string, object> {
+                { "id", id }
+            };
+
+            return _sQLHelper.querySingle<TRTripSchedule>(query, param).Result;
+        }
+
+        public List<TRTripScheduleRoutes> GetTripScheduleRoutesDetail(int trip_schedule_id)
+        {
+            var query = @"select * from tr_trip_schedule_routes where trip_schedule_id = @trip_schedule_id";
+
+            var param = new Dictionary<string, object> {
+                { "trip_schedule_id", trip_schedule_id }
+            };
+
+            return _sQLHelper.queryList<TRTripScheduleRoutes>(query, param).Result;
         }
     }
 }

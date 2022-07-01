@@ -11,10 +11,10 @@ namespace SeatBookingService.Models.DTO
         public string departure_hours { get; set; }
         public string description { get; set; }
         public string created_by { get; set; }
-        public List<TRTripScheduleRoutes> tripRoutes { get; set; }
+        public List<TripScheduleRoutes> tripRoutes { get; set; }
     }
 
-    public class TRTripScheduleRoutes
+    public class TripScheduleRoutes
     {
         public string city { get; set; }
         public int route_order { get; set; }

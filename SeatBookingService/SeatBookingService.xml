@@ -324,6 +324,22 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetTripNonRegulerDetails(System.Int32)">
+            <summary>
+            Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.UpdateRoutesNonReguler(SeatBookingService.Models.DTO.TRTripScheduleRoutesDto)">
+            <summary>
+            Digunakan untuk edit routes dan station routes
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data

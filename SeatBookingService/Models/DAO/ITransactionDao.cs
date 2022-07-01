@@ -43,5 +43,7 @@ namespace SeatBookingService.Models.DAO
         public List<GetSummaryReportDto> GetSummaryReport(DateTime? schedule_date);
         public List<TripNonRegulerDto> GetAllTripScheduleNonReguler(DateTime? schedule_date);
         public bool UpdateRoutesNonReguler(TRTripScheduleRoutesDto obj);
+        public TRTripSchedule GetTrTripScheduleDetail(int id);
+        public List<TRTripScheduleRoutes> GetTripScheduleRoutesDetail(int trip_schedule_id);
     }
 }
