@@ -410,14 +410,14 @@ namespace SeatBookingService.Controllers
         /// </returns>
         [HttpGet]
         [Route("GetAllTrip")]
-        public async Task<IActionResult> GetAllTrip([FromQuery] DateTime? schedule_date)
+        public async Task<IActionResult> GetAllTrip([FromQuery] DateTime? schedule_date, string city_from, string city_to)
         {
             var response = new APIResult<List<MSTripDto>>();
 
             try
             {
                 response.is_ok = true;
-                response.data = _transactionDao.GetAllTrip(schedule_date);
+                response.data = _transactionDao.GetAllTrip(schedule_date, city_from, city_to);
                 response.data_records = response.data.Count;
                 response.httpCode = HttpStatusCode.OK;
             }

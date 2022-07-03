@@ -148,7 +148,7 @@
             
             </returns>
         </member>
-        <member name="M:SeatBookingService.Controllers.TransactionController.GetAllTrip(System.Nullable{System.DateTime})">
+        <member name="M:SeatBookingService.Controllers.TransactionController.GetAllTrip(System.Nullable{System.DateTime},System.String,System.String)">
             <summary>
             Digunakan untuk menampilkan seluruh trip baik regular maupun non regular
             </summary>

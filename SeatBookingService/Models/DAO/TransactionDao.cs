@@ -675,7 +675,7 @@ namespace SeatBookingService.Models.DAO
             return result;
         }
 
-        public List<MSTripDto> GetAllTrip(DateTime? schedule_date)
+        public List<MSTripDto> GetAllTrip(DateTime? schedule_date, string city_from, string city_to)
         {
             var param = new Dictionary<string, object>();
             var query = @"select 
@@ -700,6 +700,16 @@ namespace SeatBookingService.Models.DAO
 	                            left join ms_routes b on b.id = a.routes_id
 	                            left join ms_class_bus c on c.id = b.class_bus_id
 	                            where b.is_active = 1
+                                and b.id in (select 
+												a.routes_id
+												-- a.city as city_from, 
+												-- b.city as city_to, 
+												-- a.route_order as order_from,
+												-- b.route_order as order_to
+											from ms_stations_routes a
+											left join (select * from ms_stations_routes) b on a.routes_id = b.routes_id
+											where a.city = @city_from and b.city = @city_to and a.route_order < b.route_order
+								)
 	                            group by b.id
                             UNION
                                 select 
@@ -713,6 +723,18 @@ namespace SeatBookingService.Models.DAO
 	                            left join tr_trip_schedule b on b.id = a.trip_schedule_id
 	                            left join ms_class_bus c on c.id = b.class_bus_id
                                 where b.schedule_date = @schedule_date
+                                and b.id in (select 
+												a.trip_schedule_id
+												-- a.city as city_from, 
+												-- b.city as city_to, 
+												-- a.route_order as order_from,
+												-- b.route_order as order_to,
+												-- c.schedule_date
+											from tr_trip_schedule_routes a
+											left join (select * from tr_trip_schedule_routes) b on a.trip_schedule_id = b.trip_schedule_id
+											left join tr_trip_schedule c on c.id = b.trip_schedule_id
+											where a.city = @city_from and b.city = @city_to and a.route_order < b.route_order
+											and c.schedule_date = @schedule_date)
 	                            group by b.id
                             ) a 
                             left join (select result.*
@@ -725,10 +747,12 @@ namespace SeatBookingService.Models.DAO
                                              ) result
 	                                    where a.key = 'trip_type') b on b.trip_type_id = a.trip_type_id
                             left join tr_trip c on c.route_id = a.id_route and c.trip_type_id = b.trip_type_id and c.schedule_date = @schedule_date
-                            left join tr_bus_trip_schedule d on d.trip_id = c.id";
+                            left join lateral (select * from tr_bus_trip_schedule where trip_id = c.id order by created_date desc limit 1) d on d.trip_id = c.id";
 
             param = new Dictionary<string, object> {
-                    { "schedule_date", schedule_date }
+                    { "schedule_date", schedule_date },
+                    { "city_from", city_from },
+                    { "city_to", city_to }
                 };
 
             return _sQLHelper.queryList<MSTripDto>(query, param).Result;

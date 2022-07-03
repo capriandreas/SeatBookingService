@@ -31,7 +31,7 @@ namespace SeatBookingService.Models.DAO
         public bool RejectCancelSeat(TRCancellation obj);
         public bool InsertNewStationRoutes(TRStationRoutesDto obj);
         public bool CreateTripScheduleNonRegular(TRTripScheduleRoutesDto obj);
-        public List<MSTripDto> GetAllTrip(DateTime? schedule_date);
+        public List<MSTripDto> GetAllTrip(DateTime? schedule_date, string city_from, string city_to);
         public TRTrip GetTrTrip(TripDetailParamDto obj);
         public bool CreateTrTrip(TripDetailParamDto obj);
         public bool AssignBusStatus(List<TRBusAssignStatus> obj);
