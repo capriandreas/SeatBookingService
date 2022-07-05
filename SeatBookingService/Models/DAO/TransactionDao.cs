@@ -855,9 +855,11 @@ namespace SeatBookingService.Models.DAO
 								) 
 								when f.trip_type_id = 2 then 
                                 (
-									select CONCAT_WS (' - ', a.origin, a.destination) as `Route`
-									from tr_trip_schedule a
+									select GROUP_CONCAT(a.city order by a.route_order separator ' - ') as `Route`
+                                    from tr_trip_schedule_routes a
+									left join tr_trip_schedule b on b.id = a.trip_schedule_id
 									where a.id = f.route_id
+                                    group by b.id
 								) 
 							end as route,
                             case 
