@@ -677,6 +677,17 @@ namespace SeatBookingService.Models.DAO
 
         public List<MSTripDto> GetAllTrip(DateTime? schedule_date, string city_from, string city_to)
         {
+            string generatedQuery = string.Empty;
+
+            if(!string.IsNullOrWhiteSpace(city_from) && string.IsNullOrWhiteSpace(city_to))
+            {
+                generatedQuery = "where a.city = @city_from ";
+            }
+            else if(!string.IsNullOrWhiteSpace(city_from) && !string.IsNullOrWhiteSpace(city_to))
+            {
+                generatedQuery = "where a.city = @city_from and b.city = @city_to and a.route_order < b.route_order ";
+            }
+
             var param = new Dictionary<string, object>();
             var query = @"select 
                             a.id_route,
@@ -707,8 +718,9 @@ namespace SeatBookingService.Models.DAO
 												-- a.route_order as order_from,
 												-- b.route_order as order_to
 											from ms_stations_routes a
-											left join (select * from ms_stations_routes) b on a.routes_id = b.routes_id
-											where a.city = @city_from and b.city = @city_to and a.route_order < b.route_order
+											left join (select * from ms_stations_routes) b on a.routes_id = b.routes_id "
+                                            + generatedQuery +
+											@"
 								)
 	                            group by b.id
                             UNION
@@ -732,9 +744,9 @@ namespace SeatBookingService.Models.DAO
 												-- c.schedule_date
 											from tr_trip_schedule_routes a
 											left join (select * from tr_trip_schedule_routes) b on a.trip_schedule_id = b.trip_schedule_id
-											left join tr_trip_schedule c on c.id = b.trip_schedule_id
-											where a.city = @city_from and b.city = @city_to and a.route_order < b.route_order
-											and c.schedule_date = @schedule_date)
+											left join tr_trip_schedule c on c.id = b.trip_schedule_id "
+                                            + generatedQuery +
+                                            @" and c.schedule_date = @schedule_date)
 	                            group by b.id
                             ) a 
                             left join (select result.*

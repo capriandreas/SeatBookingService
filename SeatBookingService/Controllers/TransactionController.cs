@@ -413,12 +413,20 @@ namespace SeatBookingService.Controllers
         public async Task<IActionResult> GetAllTrip([FromQuery] DateTime? schedule_date, string city_from, string city_to)
         {
             var response = new APIResult<List<MSTripDto>>();
+            BusinessLogicResult res = new BusinessLogicResult();
 
             try
             {
+                res = TransactionLogic.GetAllTripValidation(schedule_date, city_from, city_to);
+
+                if (res.result)
+                {
+                    response.data = _transactionDao.GetAllTrip(schedule_date, city_from, city_to);
+                    response.data_records = response.data.Count;
+                }
+
+                response.message = res.message;
                 response.is_ok = true;
-                response.data = _transactionDao.GetAllTrip(schedule_date, city_from, city_to);
-                response.data_records = response.data.Count;
                 response.httpCode = HttpStatusCode.OK;
             }
             catch (Exception ex)

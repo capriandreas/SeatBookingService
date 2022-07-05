@@ -363,5 +363,25 @@ namespace SeatBookingService.BusinessLogic
 
             return res;
         }
+
+        public static BusinessLogicResult GetAllTripValidation(DateTime? schedule_date, string city_from, string city_to)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (schedule_date == DateTime.MinValue || schedule_date == null)
+            {
+                errMsg = "Tanggal keberangkatan tidak boleh kosong";
+            }
+            else if(string.IsNullOrWhiteSpace(city_from) && !string.IsNullOrWhiteSpace(city_to))
+            {
+                errMsg = "Kota asal tidak boleh kosong";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+            return res;
+        }
     }
 }
