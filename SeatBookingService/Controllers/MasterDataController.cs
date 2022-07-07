@@ -42,18 +42,10 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<List<MSBus>>();
 
-            try
-            {
-                response.is_ok = true;
-                response.data = _masterDataDao.GetAllMasterBus();
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = _masterDataDao.GetAllMasterBus();
+            response.data_records = response.data.Count;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
@@ -70,18 +62,10 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<List<MSStationsRoutes>>();
 
-            try
-            {
-                response.is_ok = true;
-                response.data = _masterDataDao.GetAllOriginCity();
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = _masterDataDao.GetAllOriginCity();
+            response.data_records = response.data.Count;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
@@ -98,18 +82,10 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<List<MSStationsRoutes>>();
 
-            try
-            {
-                response.is_ok = true;
-                response.data = _masterDataDao.GetAllDestinationCity(obj);
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = _masterDataDao.GetAllDestinationCity(obj);
+            response.data_records = response.data.Count;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
@@ -126,18 +102,10 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<List<MSUsersDto>>();
 
-            try
-            {
-                response.is_ok = true;
-                response.data = _masterDataDao.GetAllListUsers();
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = _masterDataDao.GetAllListUsers();
+            response.data_records = response.data.Count;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
@@ -154,18 +122,10 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<List<MSClassBusDto>>();
 
-            try
-            {
-                response.is_ok = true;
-                response.data = _masterDataDao.GetAllMasterClassBus();
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = _masterDataDao.GetAllMasterClassBus();
+            response.data_records = response.data.Count;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
@@ -182,18 +142,10 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<List<MSRolesDto>>();
 
-            try
-            {
-                response.is_ok = true;
-                response.data = _masterDataDao.GetAllMasterRoles();
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = _masterDataDao.GetAllMasterRoles();
+            response.data_records = response.data.Count;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
@@ -210,18 +162,10 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<List<MSStationsRoutesDto>>();
 
-            try
-            {
-                response.is_ok = true;
-                response.data = _masterDataDao.GetAllStationRoutes();
-                response.data_records = response.data.Count;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = _masterDataDao.GetAllStationRoutes();
+            response.data_records = response.data.Count;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
@@ -239,25 +183,16 @@ namespace SeatBookingService.Controllers
             var response = new APIResult<List<string>>();
             BusinessLogicResult res = new BusinessLogicResult();
 
-            try
+            res = MasterDataLogic.UpdateRoutesReguler(obj);
+
+            if (res.result)
             {
-                res = MasterDataLogic.UpdateRoutesReguler(obj);
-
-                if (res.result)
-                {
-                    response.is_ok = _masterDataDao.UpdateRoutesReguler(obj);
-                }
-
-                response.is_ok = true;
-                response.httpCode = HttpStatusCode.OK;
-                response.message = res.message;
-
+                response.is_ok = _masterDataDao.UpdateRoutesReguler(obj);
             }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+
+            response.is_ok = true;
+            response.httpCode = HttpStatusCode.OK;
+            response.message = res.message;
 
             return Ok(response);
         }
@@ -274,44 +209,36 @@ namespace SeatBookingService.Controllers
         {
             var response = new APIResult<TRStationRoutesDto>();
 
-            try
+            TRStationRoutesDto result = new TRStationRoutesDto();
+            MSRoutes routes = _masterDataDao.GetMSRoutes(id);
+            List<MSStationRoutes> stationRoutes = _masterDataDao.GetMSStationRoutes(id);
+
+            if (routes != null)
             {
-                TRStationRoutesDto result = new TRStationRoutesDto();
-                MSRoutes routes = _masterDataDao.GetMSRoutes(id);
-                List<MSStationRoutes> stationRoutes = _masterDataDao.GetMSStationRoutes(id);
+                result.id = routes.id;
+                result.class_bus_id = routes.class_bus_id;
+                result.departure_hours = routes.departure_hours;
+                result.description = routes.description;
+                result.created_by = routes.created_by;
+            }
 
-                if(routes != null)
+            if (stationRoutes != null && stationRoutes.Count > 0)
+            {
+                result.stationRoutes = new List<MSStationRoutes>();
+                foreach (var item in stationRoutes)
                 {
-                    result.id = routes.id;
-                    result.class_bus_id = routes.class_bus_id;
-                    result.departure_hours = routes.departure_hours;
-                    result.description = routes.description;
-                    result.created_by = routes.created_by;
-                }
-
-                if(stationRoutes != null && stationRoutes.Count > 0)
-                {
-                    result.stationRoutes = new List<MSStationRoutes>();
-                    foreach (var item in stationRoutes)
+                    result.stationRoutes.Add(new MSStationRoutes
                     {
-                        result.stationRoutes.Add(new MSStationRoutes
-                        {
-                            route_order = item.route_order,
-                            city = item.city
-                        });
-                    }
+                        route_order = item.route_order,
+                        city = item.city
+                    });
                 }
+            }
 
-                response.is_ok = true;
-                response.data = result;
-                response.data_records = 1;
-                response.httpCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                response.is_ok = false;
-                response.message = ex.Message;
-            }
+            response.is_ok = true;
+            response.data = result;
+            response.data_records = 1;
+            response.httpCode = HttpStatusCode.OK;
 
             return Ok(response);
         }
