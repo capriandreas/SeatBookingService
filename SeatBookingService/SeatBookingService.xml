@@ -356,6 +356,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.UpdateRoutesReguler(SeatBookingService.Models.DTO.TRStationRoutesDto)">
+            <summary>
+            Digunakan untuk edit routes dan station routes
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data

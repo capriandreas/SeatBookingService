@@ -364,6 +364,52 @@ namespace SeatBookingService.BusinessLogic
             return res;
         }
 
+        public static BusinessLogicResult UpdateRoutesReguler(TRStationRoutesDto obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+            int counter = 1;
+
+            string errMsg = string.Empty;
+
+            if (string.IsNullOrEmpty(obj.id.ToString()))
+            {
+                errMsg = "ID tidak boleh kosong";
+            }
+            else if (string.IsNullOrEmpty(obj.class_bus_id.ToString()))
+            {
+                errMsg = "Kelas Bus tidak boleh kosong";
+            }
+            else if (obj.stationRoutes.Count < 0)
+            {
+                errMsg = "Daftar kota tidak boleh kosong";
+            }
+            else if (obj.stationRoutes.Count == 1)
+            {
+                errMsg = "Daftar kota harus lebih dari 1";
+            }
+            else if (string.IsNullOrEmpty(obj.created_by))
+            {
+                errMsg = "Created By tidak boleh kosong";
+            }
+            else if (obj.stationRoutes.Count > 0)
+            {
+                foreach (var item in obj.stationRoutes)
+                {
+                    if (string.IsNullOrEmpty(item.city) || string.IsNullOrWhiteSpace(item.city))
+                    {
+                        errMsg = "Nama kota tidak boleh kosong (Urutan: " + counter + ")";
+                        break;
+                    }
+                    counter++;
+                }
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
+
         public static BusinessLogicResult GetAllTripValidation(DateTime? schedule_date, string city_from, string city_to)
         {
             BusinessLogicResult res = new BusinessLogicResult();
