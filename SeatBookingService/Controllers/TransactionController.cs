@@ -1233,6 +1233,34 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk menampilkan seluruh trip schedule non reguler
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetAllTripReguler")]
+        public async Task<IActionResult> GetAllTripReguler()
+        {
+            var response = new APIResult<List<TripRegulerDto>>();
+
+            try
+            {
+                response.is_ok = true;
+                response.data = _transactionDao.GetAllTripReguler();
+                response.data_records = response.data.Count;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>

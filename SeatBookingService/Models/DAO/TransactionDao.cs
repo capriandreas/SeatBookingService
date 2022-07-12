@@ -1132,5 +1132,23 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<TRTripScheduleRoutes>(query, param).Result;
         }
+
+        public List<TripRegulerDto> GetAllTripReguler()
+        {
+            var query = @"select
+									b.id as 'id_route',
+									GROUP_CONCAT(a.city separator ' - ') as `Route`,
+									b.departure_hours,
+									c.class_bus,
+									b.description,
+									2 as trip_type_id
+								from ms_stations_routes a
+								left join ms_routes b on b.id = a.routes_id
+								left join ms_class_bus c on c.id = b.class_bus_id 
+								where b.is_active = 1 
+								group by b.id";
+
+            return _sQLHelper.queryList<TripRegulerDto>(query, null).Result;
+        }
     }
 }
