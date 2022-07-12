@@ -1150,5 +1150,27 @@ namespace SeatBookingService.Models.DAO
 
             return _sQLHelper.queryList<TripRegulerDto>(query, null).Result;
         }
+
+        public MSRoutes GetMsRoutesById(int id)
+        {
+            var query = @"select * from ms_routes where id = @id";
+
+            var param = new Dictionary<string, object> {
+                { "id", id }
+            };
+
+            return _sQLHelper.querySingle<MSRoutes>(query, param).Result;
+        }
+
+        public List<MSStationRoutes> GetMasterRoutesDetail(int routes_id)
+        {
+            var query = @"select * from ms_stations_routes where routes_id = @routes_id";
+
+            var param = new Dictionary<string, object> {
+                { "routes_id", routes_id }
+            };
+
+            return _sQLHelper.queryList<MSStationRoutes>(query, param).Result;
+        }
     }
 }

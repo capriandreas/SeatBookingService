@@ -46,5 +46,7 @@ namespace SeatBookingService.Models.DAO
         public TRTripSchedule GetTrTripScheduleDetail(int id);
         public List<TRTripScheduleRoutes> GetTripScheduleRoutesDetail(int trip_schedule_id);
         public List<TripRegulerDto> GetAllTripReguler();
+        public MSRoutes GetMsRoutesById(int id);
+        public List<MSStationRoutes> GetMasterRoutesDetail(int routes_id);
     }
 }

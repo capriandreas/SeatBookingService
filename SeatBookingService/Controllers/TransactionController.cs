@@ -1261,6 +1261,60 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk menampilkan seluruh bus. Dimana akan digunakan untuk set status bus apakah idle atau standby berdasarkan tanggal.
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpGet]
+        [Route("GetTripRegulerDetails")]
+        public async Task<IActionResult> GetTripRegulerDetails([FromQuery] int id)
+        {
+            var response = new APIResult<TRStationRoutesDto>();
+
+            try
+            {
+                TRStationRoutesDto result = new TRStationRoutesDto();
+                MSRoutes routes = _transactionDao.GetMsRoutesById(id);
+                List<MSStationRoutes> tripRoutes = _transactionDao.GetMasterRoutesDetail(id);
+
+                if (routes != null)
+                {
+                    result.id = routes.id;
+                    result.class_bus_id = routes.class_bus_id;
+                    result.departure_hours = routes.departure_hours;
+                    result.description = routes.description;
+                    result.created_by = routes.created_by;
+                }
+
+                if (tripRoutes != null && tripRoutes.Count > 0)
+                {
+                    result.stationRoutes = new List<MSStationRoutes>();
+                    foreach (var item in tripRoutes)
+                    {
+                        result.stationRoutes.Add(new MSStationRoutes
+                        {
+                            route_order = item.route_order,
+                            city = item.city
+                        });
+                    }
+                }
+
+                response.is_ok = true;
+                response.data = result;
+                response.data_records = 1;
+                response.httpCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>
