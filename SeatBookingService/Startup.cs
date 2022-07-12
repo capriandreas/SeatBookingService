@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using Prometheus;
 using SeatBookingService.Helper;
 using SeatBookingService.Middleware;
 using SeatBookingService.Models.DAO;
@@ -112,6 +113,11 @@ namespace SeatBookingService
             app.ConfigureExceptionHandler();
 
             app.UseRouting();
+
+            //Prometheus
+            app.UseHttpMetrics();
+            app.UseMetricServer();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
