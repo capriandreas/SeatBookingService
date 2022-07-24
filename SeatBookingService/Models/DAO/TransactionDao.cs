@@ -1296,5 +1296,25 @@ select null as id, null as reserved_seat_id, a.id as seat_id, a.seat_order, 0 as
 
             return result;
         }
+
+        public bool DeleteTripNonReguler(List<TRTripSchedule> obj)
+        {
+            string query = string.Empty;
+            bool result = false;
+            var param = new Dictionary<string, object>();
+
+            foreach (var item in obj)
+            {
+                query = @" update tr_trip_schedule set is_active = 0 where id = @id;";
+
+                param = new Dictionary<string, object> {
+                    { "id", item.id }
+                };
+
+                result = _sQLHelper.queryUpdate(query, param).Result > 0;
+            }
+
+            return result;
+        }
     }
 }

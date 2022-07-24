@@ -50,5 +50,6 @@ namespace SeatBookingService.Models.DAO
         public List<MSStationRoutes> GetMasterRoutesDetail(int routes_id);
         public bool UpdateRoutesReguler(TRStationRoutesDto obj);
         public bool DeleteTripReguler(List<MSRoutes> obj);
+        public bool DeleteTripNonReguler(List<TRTripSchedule> obj);
     }
 }

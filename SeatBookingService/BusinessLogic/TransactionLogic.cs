@@ -427,6 +427,23 @@ namespace SeatBookingService.BusinessLogic
             return res;
         }
 
+        public static BusinessLogicResult DeleteTripNonReguler(List<TRTripSchedule> obj)
+        {
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            string errMsg = string.Empty;
+
+            if (obj.Count <= 0)
+            {
+                errMsg = "Pilih rute yang ingin dihapus";
+            }
+
+            res.result = !string.IsNullOrEmpty(errMsg) ? false : true;
+            res.message = errMsg;
+
+            return res;
+        }
+
         public static BusinessLogicResult GetAllTripValidation(DateTime? schedule_date, string city_from, string city_to)
         {
             BusinessLogicResult res = new BusinessLogicResult();

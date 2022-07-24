@@ -1387,6 +1387,42 @@ namespace SeatBookingService.Controllers
         }
 
         /// <summary>
+        /// Digunakan untuk edit routes dan station routes
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [HttpPost]
+        [Route("DeleteTripNonReguler")]
+        public async Task<IActionResult> DeleteTripNonReguler(List<TRTripSchedule> obj)
+        {
+            var response = new APIResult<List<string>>();
+            BusinessLogicResult res = new BusinessLogicResult();
+
+            try
+            {
+                res = TransactionLogic.DeleteTripNonReguler(obj);
+
+                if (res.result)
+                {
+                    response.is_ok = _transactionDao.DeleteTripNonReguler(obj);
+                }
+
+                response.is_ok = true;
+                response.httpCode = HttpStatusCode.OK;
+                response.message = res.message;
+
+            }
+            catch (Exception ex)
+            {
+                response.is_ok = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Digunakan untuk generate seat untuk master data
         /// </summary>
         /// <returns>
