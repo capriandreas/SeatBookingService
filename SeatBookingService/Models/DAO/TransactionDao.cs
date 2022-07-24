@@ -1088,6 +1088,7 @@ select null as id, null as reserved_seat_id, a.id as seat_id, a.seat_order, 0 as
 	                            left join ms_class_bus c on c.id = b.class_bus_id "
                                 + (schedule_date != null ? @" where b.schedule_date = @schedule_date" : string.Empty)
                                 + @"
+                                where b.is_active = 1
 	                            group by b.id";
 
             var param = new Dictionary<string, object> {
