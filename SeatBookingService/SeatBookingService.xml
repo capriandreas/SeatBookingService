@@ -364,6 +364,14 @@
             
             </returns>
         </member>
+        <member name="M:SeatBookingService.Controllers.TransactionController.DeleteTripReguler(System.Collections.Generic.List{SeatBookingService.Models.MSRoutes})">
+            <summary>
+            Digunakan untuk edit routes dan station routes
+            </summary>
+            <returns>
+            
+            </returns>
+        </member>
         <member name="M:SeatBookingService.Controllers.TransactionController.GenerateSeat(SeatBookingService.Models.GenerateSeat)">
             <summary>
             Digunakan untuk generate seat untuk master data
