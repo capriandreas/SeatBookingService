@@ -4,7 +4,7 @@
     {
         public int? reserved_seat_id { get; set; }
         public int seat_id { get; set; }
-        public int class_bus_id { get; set; }
+        public int? class_bus_id { get; set; }
         public string seat_column { get; set; }
         public string seat_row { get; set; }
         public int? users_id { get; set; }
